@@ -1,0 +1,11 @@
+# Normaliza finales de línea (el equipo trabaja en Windows y los contenedores en Linux).
+* text=auto eol=lf
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+*.png binary
+*.webp binary
+*.ogg binary
+*.mp3 binary
+*.mp4 binary
+*.webm binary
+*.woff2 binary

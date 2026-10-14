@@ -1,0 +1,74 @@
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espacio-2);
+  min-height: var(--alto-toque-minimo);
+  padding: var(--espacio-2) var(--espacio-6);
+  border: 2px solid transparent;
+  border-radius: var(--radio-md);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform var(--duracion-rapida) var(--curva-suave),
+    box-shadow var(--duracion-rapida) var(--curva-suave),
+    background-color var(--duracion-rapida);
+}
+
+/* Microinteracción: el botón "se levanta" al pasar el cursor y se hunde al pulsarlo. */
+.boton:not(:disabled):hover {
+  transform: translateY(-2px);
+}
+
+.boton:not(:disabled):active {
+  transform: translateY(1px);
+}
+
+.boton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.primario {
+  background: var(--color-primario);
+  color: var(--color-primario-texto);
+}
+
+.primario:not(:disabled):hover {
+  box-shadow: var(--sombra-neon);
+}
+
+.secundario {
+  background: transparent;
+  border-color: var(--color-primario);
+  color: var(--color-primario);
+}
+
+.fantasma {
+  background: transparent;
+  color: var(--color-texto-suave);
+}
+
+.fantasma:not(:disabled):hover {
+  color: var(--color-texto);
+}
+
+.anchoCompleto {
+  width: 100%;
+}
+
+.indicador {
+  width: 1em;
+  height: 1em;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: girar var(--duracion-lenta) linear infinite;
+}
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}

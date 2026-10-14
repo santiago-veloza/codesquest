@@ -1,0 +1,220 @@
+{
+  "$schema": "../esquemas/mundo.schema.json",
+  "codigo": "mundo_3",
+  "orden": 3,
+  "nombre": "Las Minas de los Bucles",
+  "conceptos": "Ciclos for y while, repetición de instrucciones",
+  "descripcion": "El Capataz necesita extraer cristales, pero repetir tareas a mano es imposible: los bucles son la herramienta.",
+  "funciones_juego": [
+    "avanzar",
+    "saltar",
+    "atacar",
+    "esquivar",
+    "abrir_puerta",
+    "buscar_llave",
+    "esperar",
+    "picar",
+    "recoger_mineral",
+    "colocar_soporte"
+  ],
+  "mapa": [
+    "wwwwwwwwwwwwwwwwwwwwwwwwwww",
+    "waccccceccwcccccccccccwccew",
+    "wwccwwwwwcwcwwwwwcwwwcwcwww",
+    "wcccccccwcwcwcccwcwcwcwcccw",
+    "wwwwwcwcwcccwcwcwcwcwcwcwcw",
+    "wcccccwcwcwcccwcwcccwcwcwcw",
+    "w1wwwwwcwcwcwwwcwcwcwcwwwcw",
+    "wcccwcccccwcwcccccwcwcccccw",
+    "wcwcwcwwcwwcwcwcwcwcwcwwwcw",
+    "wcccccwcccccccccccecccccwcw",
+    "wcwwwwwwwcwwwwwcwwwcwwwwwcw",
+    "wcccccccwcccwcccwcccwcccccw",
+    "wwccwwwcwwwwwcwwwcwww3wwwww",
+    "weccccc2ccccccwccccccccccsw",
+    "wwwwwwwwwwwwwwwwwwwwwwwwwww"
+  ],
+  "desafios": [
+    {
+      "codigo": "3.1",
+      "orden": 1,
+      "titulo": "Golpes contados",
+      "dificultad": "intermedio",
+      "enunciado": "El Capataz dejó en la caja golpes cuántas veces hay que picar la veta. Usa el for para picar exactamente esas veces.",
+      "codigo_base": "for i in range(______):\n    picar()",
+      "pistas": [
+        "range(n) hace que el for repita su bloque n veces.",
+        "La cantidad de golpes ya está guardada en una variable.",
+        "Escribe dentro de range() el nombre de la variable, no un número fijo."
+      ],
+      "pruebas": [
+        {
+          "tipo": "estado_escena",
+          "esperado": {
+            "acciones": "{{acciones}}"
+          }
+        },
+        {
+          "tipo": "estructura",
+          "reglas": [
+            {
+              "regla": "usa_nodo",
+              "nodo": "For",
+              "mensaje": "Usa un ciclo for para repetir el golpe."
+            }
+          ]
+        }
+      ],
+      "xp_base": 20,
+      "solucion_referencia": "for i in range(golpes):\n    picar()",
+      "errores_tipicos": [
+        {
+          "descripcion": "Número fijo",
+          "codigo": "for i in range(5):\n    picar()"
+        },
+        {
+          "descripcion": "Un golpe de más",
+          "codigo": "for i in range(golpes + 1):\n    picar()"
+        },
+        {
+          "descripcion": "Sin ciclo",
+          "codigo": "picar()\npicar()\npicar()\npicar()\npicar()"
+        }
+      ],
+      "variantes": [
+        {
+          "preparacion": "golpes = 5",
+          "esperado": {
+            "acciones": [
+              "picar",
+              "picar",
+              "picar",
+              "picar",
+              "picar"
+            ]
+          }
+        },
+        {
+          "preparacion": "golpes = 3",
+          "esperado": {
+            "acciones": [
+              "picar",
+              "picar",
+              "picar"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "codigo": "3.2",
+      "orden": 2,
+      "titulo": "Contando vagonetas",
+      "dificultad": "intermedio",
+      "enunciado": "Hay que numerar las vagonetas en voz alta: muestra en una línea cada número, desde 1 hasta el total.",
+      "codigo_base": "for vagon in range(1, total + 1):\n    print(______)",
+      "pistas": [
+        "En cada vuelta del for, la variable vagon toma un valor distinto.",
+        "Lo que se muestra cambia en cada vuelta: no puede ser un valor fijo.",
+        "Muestra con print la variable que usa el for, sin comillas."
+      ],
+      "pruebas": [
+        {
+          "tipo": "salida",
+          "esperado": "{{salida}}"
+        }
+      ],
+      "xp_base": 20,
+      "solucion_referencia": "for vagon in range(1, total + 1):\n    print(vagon)",
+      "errores_tipicos": [
+        {
+          "descripcion": "Muestra el total cada vez",
+          "codigo": "for vagon in range(1, total + 1):\n    print(total)"
+        },
+        {
+          "descripcion": "Se corre en uno",
+          "codigo": "for vagon in range(1, total + 1):\n    print(vagon + 1)"
+        },
+        {
+          "descripcion": "Escribe el nombre como texto",
+          "codigo": "for vagon in range(1, total + 1):\n    print(\"vagon\")"
+        }
+      ],
+      "variantes": [
+        {
+          "preparacion": "total = 5",
+          "esperado": {
+            "salida": "1\n2\n3\n4\n5"
+          }
+        },
+        {
+          "preparacion": "total = 3",
+          "esperado": {
+            "salida": "1\n2\n3"
+          }
+        }
+      ]
+    },
+    {
+      "codigo": "3.3",
+      "orden": 3,
+      "titulo": "Mi primer while",
+      "dificultad": "avanzado",
+      "enunciado": "Cada golpe gasta 10 de energía. Pica mientras te quede energía, descontando 10 en cada vuelta.",
+      "codigo_base": "while energia > 0:\n    picar()\n    energia = ______",
+      "pistas": [
+        "Un while se repite mientras su condición sea verdadera: algo debe cambiar dentro.",
+        "Si la energía nunca baja, el ciclo no termina (bucle infinito).",
+        "La nueva energía es la energía actual menos lo que gasta un golpe."
+      ],
+      "pruebas": [
+        {
+          "tipo": "estado_escena",
+          "esperado": {
+            "acciones": "{{acciones}}"
+          }
+        }
+      ],
+      "xp_base": 30,
+      "solucion_referencia": "while energia > 0:\n    picar()\n    energia = energia - 10",
+      "errores_tipicos": [
+        {
+          "descripcion": "La energía sube (bucle infinito)",
+          "codigo": "while energia > 0:\n    picar()\n    energia = energia + 10"
+        },
+        {
+          "descripcion": "Descuenta de más",
+          "codigo": "while energia > 0:\n    picar()\n    energia = energia - 20"
+        },
+        {
+          "descripcion": "La deja en cero de una vez",
+          "codigo": "while energia > 0:\n    picar()\n    energia = 0"
+        }
+      ],
+      "variantes": [
+        {
+          "preparacion": "energia = 30",
+          "esperado": {
+            "acciones": [
+              "picar",
+              "picar",
+              "picar"
+            ]
+          }
+        },
+        {
+          "preparacion": "energia = 50",
+          "esperado": {
+            "acciones": [
+              "picar",
+              "picar",
+              "picar",
+              "picar",
+              "picar"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

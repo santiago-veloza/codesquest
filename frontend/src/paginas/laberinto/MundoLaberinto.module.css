@@ -1,0 +1,130 @@
+.mundo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+}
+
+.etiqueta {
+  margin: 0;
+  color: var(--color-primario);
+  font-family: var(--fuente-titulo);
+  font-size: var(--texto-xs);
+}
+
+.titulo {
+  margin: var(--espacio-1) 0;
+  font-family: var(--fuente-titulo);
+  font-size: var(--texto-lg);
+  color: var(--color-primario);
+}
+
+.nota {
+  margin: 0;
+  color: var(--color-texto-suave);
+  font-size: var(--texto-sm);
+}
+
+.distribucion {
+  display: grid;
+  gap: var(--espacio-6);
+  grid-template-columns: minmax(0, 3fr) minmax(15rem, 1fr);
+  align-items: start;
+}
+
+@media (max-width: 56rem) {
+  .distribucion {
+    grid-template-columns: 1fr;
+  }
+}
+
+.escena {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+}
+
+.bajoEscena {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espacio-3);
+}
+
+.lateral {
+  padding: var(--espacio-4);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-lg);
+  background: var(--color-superficie);
+}
+
+.lateral h2 {
+  margin: 0 0 var(--espacio-1);
+  font-size: var(--texto-md);
+}
+
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+  margin: var(--espacio-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lista li {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+  padding: var(--espacio-3);
+  border-left: 4px solid var(--color-acento);
+  border-radius: var(--radio-sm);
+  background: var(--color-superficie-alta);
+}
+
+.lista li.resuelto {
+  border-left-color: var(--color-exito);
+}
+
+.estadoObstaculo {
+  font-size: var(--texto-sm);
+  font-weight: 600;
+  color: var(--color-acento);
+}
+
+.resuelto .estadoObstaculo {
+  color: var(--color-exito);
+}
+
+.enlaceSiguiente {
+  display: inline-flex;
+  margin-top: var(--espacio-3);
+  min-height: var(--alto-toque-minimo);
+  align-items: center;
+  padding: var(--espacio-2) var(--espacio-6);
+  border-radius: var(--radio-md);
+  background: var(--color-primario);
+  color: var(--color-primario-texto);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.gameOver {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espacio-4);
+  max-width: 32rem;
+  margin: 0 auto;
+  padding: var(--espacio-6);
+  text-align: center;
+}
+
+.gameOver p {
+  margin: 0;
+}
+
+.tituloGameOver {
+  font-family: var(--fuente-titulo);
+  font-size: var(--texto-xl);
+  color: var(--color-error);
+}

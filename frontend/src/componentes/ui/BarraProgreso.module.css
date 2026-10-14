@@ -1,0 +1,41 @@
+.contenedor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+}
+
+.encabezado {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--texto-sm);
+}
+
+.valor {
+  color: var(--color-texto-suave);
+  font-variant-numeric: tabular-nums;
+}
+
+.pista {
+  height: 0.75rem;
+  border-radius: var(--radio-pildora);
+  background: var(--color-superficie-alta);
+  overflow: hidden;
+}
+
+.relleno {
+  height: 100%;
+  border-radius: inherit;
+  transition: width var(--duracion-lenta) var(--curva-suave);
+}
+
+.primario {
+  background: var(--color-primario);
+}
+
+.xp {
+  background: linear-gradient(90deg, var(--color-primario), var(--color-acento));
+}
+
+.energia {
+  background: var(--color-exito);
+}

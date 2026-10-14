@@ -1,0 +1,433 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "codequest/esquemas/mundo.schema.json",
+  "title": "Mundo de CODEQUEST",
+  "description": "Un mundo con sus desafíos. Lo valida y carga `manage.py cargar_contenido`.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "codigo",
+    "orden",
+    "nombre",
+    "conceptos",
+    "descripcion",
+    "desafios"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "codigo": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]{1,40}$"
+    },
+    "orden": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "nombre": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "conceptos": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "descripcion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "activo": {
+      "type": "boolean"
+    },
+    "desafios": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/desafio"
+      }
+    },
+    "funciones_juego": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z_][a-z0-9_]*$"
+      },
+      "uniqueItems": true,
+      "description": "Funciones de la API de juego disponibles en este mundo (avanzar, saltar...). Cada llamada encola una acción para la escena."
+    },
+    "mapa": {
+      "type": "array",
+      "minItems": 3,
+      "description": "Laberinto del mundo, una fila por texto. w = pared, c = camino, a = inicio del jugador, s = salida, e = enemigo, 1-9 = obstáculo (el desafío con ese orden). Puede tener rutas alternativas; la carga valida que cada obstáculo sea alcanzable y que la salida se alcance con todos resueltos.",
+      "items": {
+        "type": "string",
+        "pattern": "^[wcase1-9]+$"
+      }
+    }
+  },
+  "$defs": {
+    "desafio": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "codigo",
+        "orden",
+        "titulo",
+        "dificultad",
+        "enunciado",
+        "codigo_base",
+        "pistas",
+        "pruebas",
+        "xp_base",
+        "solucion_referencia",
+        "errores_tipicos"
+      ],
+      "properties": {
+        "codigo": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+$",
+          "description": "Ej.: \"1.1\""
+        },
+        "orden": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "titulo": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "dificultad": {
+          "enum": [
+            "basico",
+            "intermedio",
+            "avanzado",
+            "jefe"
+          ]
+        },
+        "enunciado": {
+          "type": "string",
+          "minLength": 1
+        },
+        "codigo_base": {
+          "type": "string",
+          "description": "Código inicial. ______ marca el hueco que completa el estudiante."
+        },
+        "pistas": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "De menos a más reveladora. La cantidad la fija config/juego.py (PISTAS_POR_DESAFIO)."
+        },
+        "pruebas": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/prueba"
+          }
+        },
+        "variantes": {
+          "type": "array",
+          "description": "Cada variante es una ejecución distinta del código del estudiante; debe pasar con todas. Así no sirve escribir el resultado a mano.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "minProperties": 1,
+            "properties": {
+              "entradas": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Respuestas simuladas para input(), en orden."
+              },
+              "esperado": {
+                "type": "object",
+                "description": "Valores para los {{marcadores}} de las pruebas. Para salidas de texto, escribirlos como texto tal como los imprime Python (p. ej. \"34.0\").",
+                "additionalProperties": {
+                  "type": [
+                    "string",
+                    "number",
+                    "boolean",
+                    "array"
+                  ]
+                }
+              },
+              "preparacion": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Código Python que se ejecuta ANTES del código del estudiante; solo asignaciones de valores literales (p. ej. \"precio = 3.0\ncantidad = 2\"). Se usa Python y no JSON para conservar el tipo exacto (3.0 es float, 3 es int)."
+              }
+            }
+          }
+        },
+        "xp_base": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "solucion_referencia": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Solo servidor y golden tests. Nunca se envía al cliente."
+        },
+        "errores_tipicos": {
+          "type": "array",
+          "minItems": 3,
+          "description": "Soluciones incorrectas típicas: los golden tests verifican que fallen.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "descripcion",
+              "codigo"
+            ],
+            "properties": {
+              "descripcion": {
+                "type": "string",
+                "minLength": 1
+              },
+              "codigo": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "prueba": {
+      "type": "object",
+      "required": [
+        "tipo"
+      ],
+      "properties": {
+        "tipo": {
+          "enum": [
+            "salida",
+            "variables",
+            "estado_escena",
+            "estructura"
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "tipo": {
+                "const": "salida"
+              }
+            }
+          },
+          "then": {
+            "additionalProperties": false,
+            "required": [
+              "tipo",
+              "esperado"
+            ],
+            "properties": {
+              "tipo": true,
+              "esperado": {
+                "type": "string",
+                "description": "stdout esperado (sin el salto de línea final). Admite {{marcadores}}."
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "tipo": {
+                "const": "variables"
+              }
+            }
+          },
+          "then": {
+            "additionalProperties": false,
+            "required": [
+              "tipo",
+              "variables"
+            ],
+            "properties": {
+              "tipo": true,
+              "variables": {
+                "type": "object",
+                "minProperties": 1,
+                "additionalProperties": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "minProperties": 1,
+                  "properties": {
+                    "valor": {},
+                    "tipo": {
+                      "enum": [
+                        "int",
+                        "float",
+                        "str",
+                        "bool",
+                        "list",
+                        "dict"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "tipo": {
+                "const": "estado_escena"
+              }
+            }
+          },
+          "then": {
+            "additionalProperties": false,
+            "required": [
+              "tipo",
+              "esperado"
+            ],
+            "properties": {
+              "tipo": true,
+              "esperado": {
+                "type": "object",
+                "minProperties": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "tipo": {
+                "const": "estructura"
+              }
+            }
+          },
+          "then": {
+            "additionalProperties": false,
+            "required": [
+              "tipo",
+              "reglas"
+            ],
+            "properties": {
+              "tipo": true,
+              "reglas": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "$ref": "#/$defs/regla"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "regla": {
+      "description": "Regla sobre el árbol sintáctico (AST). Se puede revalidar en el servidor sin ejecutar código.",
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "regla",
+            "nodo",
+            "mensaje"
+          ],
+          "properties": {
+            "regla": {
+              "const": "usa_nodo"
+            },
+            "nodo": {
+              "enum": [
+                "For",
+                "While",
+                "If",
+                "FunctionDef",
+                "Return",
+                "BinOp",
+                "Compare",
+                "BoolOp"
+              ]
+            },
+            "mensaje": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "regla",
+            "cantidad",
+            "mensaje"
+          ],
+          "properties": {
+            "regla": {
+              "const": "min_funciones"
+            },
+            "cantidad": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "mensaje": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "regla",
+            "valor",
+            "mensaje"
+          ],
+          "properties": {
+            "regla": {
+              "const": "prohibe_literal"
+            },
+            "valor": {
+              "type": [
+                "number",
+                "string"
+              ]
+            },
+            "mensaje": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "regla",
+            "nombre",
+            "mensaje"
+          ],
+          "properties": {
+            "regla": {
+              "const": "usa_funcion"
+            },
+            "nombre": {
+              "type": "string",
+              "pattern": "^[a-z_][a-z0-9_]*$"
+            },
+            "mensaje": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

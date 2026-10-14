@@ -1,0 +1,50 @@
+.rejilla {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+  gap: var(--espacio-4);
+  margin: var(--espacio-6) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.logro {
+  display: flex;
+  gap: var(--espacio-4);
+  align-items: flex-start;
+  padding: var(--espacio-4);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-lg);
+  background: var(--color-superficie);
+}
+
+.logro p {
+  margin: var(--espacio-1) 0 0;
+}
+
+.obtenido {
+  box-shadow: var(--sombra-neon);
+}
+
+/* Bloqueado: el icono se apaga, pero el texto mantiene el contraste AA (no se baja la opacidad). */
+.bloqueado .icono {
+  filter: grayscale(1) brightness(0.5);
+}
+
+.icono {
+  flex-shrink: 0;
+  image-rendering: pixelated;
+}
+
+.nombre {
+  margin: 0;
+  font-size: var(--texto-md);
+}
+
+.estado {
+  color: var(--color-texto-suave);
+  font-size: var(--texto-sm);
+}
+
+.obtenido .estado {
+  color: var(--color-exito);
+}

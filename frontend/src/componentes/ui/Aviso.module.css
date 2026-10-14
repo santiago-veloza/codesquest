@@ -1,0 +1,22 @@
+.aviso {
+  margin-bottom: var(--espacio-4);
+  padding: var(--espacio-3) var(--espacio-4);
+  border-left: 4px solid;
+  border-radius: var(--radio-sm);
+  background: var(--color-superficie-alta);
+}
+
+.error {
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+
+.exito {
+  border-color: var(--color-exito);
+  color: var(--color-exito);
+}
+
+.info {
+  border-color: var(--color-primario);
+  color: var(--color-texto);
+}

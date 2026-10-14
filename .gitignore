@@ -1,0 +1,41 @@
+# --- Secretos ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+venv/
+.venv/
+*.egg-info/
+backend/staticfiles/
+backend/media/
+
+# --- Node / Vite ---
+node_modules/
+frontend/dist/
+frontend/coverage/
+frontend/playwright-report/
+frontend/test-results/
+*.tsbuildinfo
+
+# --- Sistema y editores ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.log
+
+# --- Godot (ejecutables y plantillas: no van en el repositorio) ---
+Godot_v*.exe
+*.tpz
+game/.godot/
+game/build/

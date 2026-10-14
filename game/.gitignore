@@ -1,0 +1,4 @@
+# Caché del editor de Godot (se regenera)
+.godot/
+# Exportaciones
+/build/

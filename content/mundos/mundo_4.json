@@ -1,0 +1,226 @@
+{
+  "$schema": "../esquemas/mundo.schema.json",
+  "codigo": "mundo_4",
+  "orden": 4,
+  "nombre": "El Reino de las Funciones",
+  "conceptos": "Funciones, parámetros, return y organización del código",
+  "descripcion": "El Rey Modular quiere reconstruir el reino con piezas reutilizables en lugar de repetir instrucciones.",
+  "funciones_juego": [
+    "avanzar",
+    "saltar",
+    "atacar",
+    "esquivar",
+    "abrir_puerta",
+    "buscar_llave",
+    "esperar",
+    "picar",
+    "recoger_mineral",
+    "colocar_soporte",
+    "colocar_bloque"
+  ],
+  "mapa": [
+    "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
+    "wacccccccewcccccccccccccccccccccw",
+    "wcwcwcwwwcwwwcwcwwcwwcwwwcccwcwcw",
+    "wcwcccccwcccwcwcccccccwcccwcwcccw",
+    "wcwwwwwcwwwcwwwcwcwwwcccwcwcwwwcw",
+    "wcccccwcccwcccccwcccwcwcwccewcwcw",
+    "wcwcwwwcwcwwwwcwwcwcwcwcwwwcwcccw",
+    "wcccccccwcccccccccwcccwcccwcwcwcw",
+    "wcwwccwwwwwwwcwcwwwwwwwwwcwcwcwcw",
+    "wcwcccccccccccwcccccccccccwcw3wcw",
+    "wcwwwwwcwcwwwwwwwcwwwwwcwwwcwcwcw",
+    "wcccccccwcccwcccwcccwcwcccccwcwcw",
+    "wwwwwww1wwwcwcwcwwwcwcwcwwwcwcwcw",
+    "wcccccwcwcwcccwcweccwcccwcccwccew",
+    "wcwcwcwcwcwwccwcwcwwwwwwwcwwwcwww",
+    "wewcccccccccccccccccc2ccccwccccsw",
+    "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww"
+  ],
+  "desafios": [
+    {
+      "codigo": "4.1",
+      "orden": 1,
+      "titulo": "Parámetros",
+      "dificultad": "intermedio",
+      "enunciado": "El Rey Modular quiere una función que salude a cualquier invitado: debe mostrar \"Bienvenido al reino, \" seguido del nombre que recibe.",
+      "codigo_base": "def saludar(nombre):\n    print(______)\n\nsaludar(invitado)",
+      "pistas": [
+        "Dentro de la función, el parámetro nombre guarda lo que se le pasó al llamarla.",
+        "Puedes unir dos textos con el signo +.",
+        "Une el texto \"Bienvenido al reino, \" (con el espacio final) con el parámetro."
+      ],
+      "pruebas": [
+        {
+          "tipo": "salida",
+          "esperado": "Bienvenido al reino, {{nombre}}"
+        }
+      ],
+      "xp_base": 20,
+      "solucion_referencia": "def saludar(nombre):\n    print(\"Bienvenido al reino, \" + nombre)\n\nsaludar(invitado)",
+      "errores_tipicos": [
+        {
+          "descripcion": "Nombre escrito a mano",
+          "codigo": "def saludar(nombre):\n    print(\"Bienvenido al reino, Ada\")\n\nsaludar(invitado)"
+        },
+        {
+          "descripcion": "Falta el espacio",
+          "codigo": "def saludar(nombre):\n    print(\"Bienvenido al reino,\" + nombre)\n\nsaludar(invitado)"
+        },
+        {
+          "descripcion": "El parámetro como texto",
+          "codigo": "def saludar(nombre):\n    print(\"Bienvenido al reino, nombre\")\n\nsaludar(invitado)"
+        }
+      ],
+      "variantes": [
+        {
+          "preparacion": "invitado = \"Ada\"",
+          "esperado": {
+            "nombre": "Ada"
+          }
+        },
+        {
+          "preparacion": "invitado = \"Alan\"",
+          "esperado": {
+            "nombre": "Alan"
+          }
+        }
+      ]
+    },
+    {
+      "codigo": "4.2",
+      "orden": 2,
+      "titulo": "Devolver un valor",
+      "dificultad": "avanzado",
+      "enunciado": "La función calcular_dano debe DEVOLVER el daño: el ataque menos la defensa. El resultado se guarda en la variable dano.",
+      "codigo_base": "def calcular_dano(ataque, defensa):\n    ______\n\ndano = calcular_dano(golpe, escudo)",
+      "pistas": [
+        "Mostrar un valor con print no es lo mismo que devolverlo.",
+        "Para que la función entregue un resultado se usa la palabra return.",
+        "Devuelve la resta del parámetro ataque menos el parámetro defensa."
+      ],
+      "pruebas": [
+        {
+          "tipo": "variables",
+          "variables": {
+            "dano": {
+              "valor": "{{dano}}",
+              "tipo": "int"
+            }
+          }
+        },
+        {
+          "tipo": "estructura",
+          "reglas": [
+            {
+              "regla": "usa_nodo",
+              "nodo": "Return",
+              "mensaje": "Tu función debe devolver el resultado con return."
+            }
+          ]
+        }
+      ],
+      "xp_base": 30,
+      "solucion_referencia": "def calcular_dano(ataque, defensa):\n    return ataque - defensa\n\ndano = calcular_dano(golpe, escudo)",
+      "errores_tipicos": [
+        {
+          "descripcion": "Muestra en vez de devolver",
+          "codigo": "def calcular_dano(ataque, defensa):\n    print(ataque - defensa)\n\ndano = calcular_dano(golpe, escudo)"
+        },
+        {
+          "descripcion": "Resta al revés",
+          "codigo": "def calcular_dano(ataque, defensa):\n    return defensa - ataque\n\ndano = calcular_dano(golpe, escudo)"
+        },
+        {
+          "descripcion": "Valor fijo",
+          "codigo": "def calcular_dano(ataque, defensa):\n    return 7\n\ndano = calcular_dano(golpe, escudo)"
+        }
+      ],
+      "variantes": [
+        {
+          "preparacion": "golpe = 10\nescudo = 3",
+          "esperado": {
+            "dano": 7
+          }
+        },
+        {
+          "preparacion": "golpe = 20\nescudo = 5",
+          "esperado": {
+            "dano": 15
+          }
+        }
+      ]
+    },
+    {
+      "codigo": "4.3",
+      "orden": 3,
+      "titulo": "Construir la torre",
+      "dificultad": "avanzado",
+      "enunciado": "La función construir_torre recibe cuántos pisos tendrá la torre y coloca un bloque por piso. Complétala y la torre se levantará con la altura pedida.",
+      "codigo_base": "def construir_torre(pisos):\n    for i in range(pisos):\n        ______\n\nconstruir_torre(altura)",
+      "pistas": [
+        "El for ya repite una vez por cada piso.",
+        "En cada vuelta hay que poner un bloque con una función de juego.",
+        "Dentro del for llama a la función que coloca un bloque."
+      ],
+      "pruebas": [
+        {
+          "tipo": "estado_escena",
+          "esperado": {
+            "acciones": "{{acciones}}"
+          }
+        },
+        {
+          "tipo": "estructura",
+          "reglas": [
+            {
+              "regla": "usa_nodo",
+              "nodo": "FunctionDef",
+              "mensaje": "Mantén la función construir_torre."
+            }
+          ]
+        }
+      ],
+      "xp_base": 30,
+      "solucion_referencia": "def construir_torre(pisos):\n    for i in range(pisos):\n        colocar_bloque()\n\nconstruir_torre(altura)",
+      "errores_tipicos": [
+        {
+          "descripcion": "Dos bloques por piso",
+          "codigo": "def construir_torre(pisos):\n    for i in range(pisos):\n        colocar_bloque()\n        colocar_bloque()\n\nconstruir_torre(altura)"
+        },
+        {
+          "descripcion": "Altura fija",
+          "codigo": "def construir_torre(pisos):\n    for i in range(3):\n        colocar_bloque()\n\nconstruir_torre(altura)"
+        },
+        {
+          "descripcion": "Nunca llama a la función",
+          "codigo": "def construir_torre(pisos):\n    for i in range(pisos):\n        colocar_bloque()"
+        }
+      ],
+      "variantes": [
+        {
+          "preparacion": "altura = 3",
+          "esperado": {
+            "acciones": [
+              "colocar_bloque",
+              "colocar_bloque",
+              "colocar_bloque"
+            ]
+          }
+        },
+        {
+          "preparacion": "altura = 5",
+          "esperado": {
+            "acciones": [
+              "colocar_bloque",
+              "colocar_bloque",
+              "colocar_bloque",
+              "colocar_bloque",
+              "colocar_bloque"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

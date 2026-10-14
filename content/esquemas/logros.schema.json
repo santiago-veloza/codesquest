@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "codequest/esquemas/logros.schema.json",
+  "title": "Catálogo de logros de CODEQUEST",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["logros"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "logros": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["codigo", "nombre", "descripcion", "icono", "criterio", "orden"],
+        "properties": {
+          "codigo": { "type": "string", "pattern": "^[a-z0-9_]{1,40}$" },
+          "nombre": { "type": "string", "minLength": 1, "maxLength": 60 },
+          "descripcion": { "type": "string", "minLength": 1, "maxLength": 200 },
+          "icono": { "type": "string", "pattern": "^img/logros/[a-z0-9_]+\\.(png|svg)$", "description": "Ruta pública en frontend/public/." },
+          "criterio": { "enum": ["primer_desafio", "completar_mundo", "mundo_sin_pistas"] },
+          "mundo": { "type": "string", "description": "Código del mundo (solo para completar_mundo)." },
+          "orden": { "type": "integer", "minimum": 1 }
+        },
+        "if": { "properties": { "criterio": { "const": "completar_mundo" } } },
+        "then": { "required": ["mundo"] },
+        "else": { "not": { "required": ["mundo"] } }
+      }
+    }
+  }
+}

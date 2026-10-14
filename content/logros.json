@@ -1,0 +1,12 @@
+{
+  "$schema": "./esquemas/logros.schema.json",
+  "logros": [
+    { "codigo": "primer_codigo", "nombre": "Primer Código", "descripcion": "Resolviste tu primer desafío.", "icono": "img/logros/logro_primer_codigo.png", "criterio": "primer_desafio", "orden": 1 },
+    { "codigo": "maestro_variables", "nombre": "Maestro de Variables", "descripcion": "Completaste la Ciudad de las Variables.", "icono": "img/logros/logro_maestro_variables.png", "criterio": "completar_mundo", "mundo": "mundo_1", "orden": 2 },
+    { "codigo": "guerrero_condiciones", "nombre": "Guerrero de Condiciones", "descripcion": "Completaste el Bosque de las Decisiones.", "icono": "img/logros/logro_guerrero_condiciones.png", "criterio": "completar_mundo", "mundo": "mundo_2", "orden": 3 },
+    { "codigo": "maestro_ciclos", "nombre": "Maestro de Ciclos", "descripcion": "Completaste las Minas de los Bucles.", "icono": "img/logros/logro_maestro_ciclos.png", "criterio": "completar_mundo", "mundo": "mundo_3", "orden": 4 },
+    { "codigo": "arquitecto_funciones", "nombre": "Arquitecto de Funciones", "descripcion": "Completaste el Reino de las Funciones.", "icono": "img/logros/logro_arquitecto_funciones.png", "criterio": "completar_mundo", "mundo": "mundo_4", "orden": 5 },
+    { "codigo": "cazador_bugs", "nombre": "Cazador de Bugs", "descripcion": "Derrotaste a Bug Master y restauraste CODEQUEST.", "icono": "img/logros/logro_cazador_bugs.png", "criterio": "completar_mundo", "mundo": "mundo_5", "orden": 6 },
+    { "codigo": "sin_pistas", "nombre": "Sin Pistas", "descripcion": "Completaste un mundo entero sin usar ninguna pista.", "icono": "img/logros/logro_sin_pistas.png", "criterio": "mundo_sin_pistas", "orden": 7 }
+  ]
+}

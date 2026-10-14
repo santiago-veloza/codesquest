@@ -1,0 +1,172 @@
+{
+  "$schema": "../esquemas/mundo.schema.json",
+  "codigo": "mundo_1",
+  "orden": 1,
+  "nombre": "La Ciudad de las Variables",
+  "conceptos": "Variables, tipos de datos, operadores, entrada y salida",
+  "descripcion": "El sistema central dejó de recordar los datos de la ciudad. El Archivista necesita que devuelvas los valores a sus cajas de memoria.",
+  "funciones_juego": [],
+  "mapa": [
+    "wwwwwwwwwwwwwww",
+    "waccwcccccccccw",
+    "wwwcwcwwwwwcwcw",
+    "weccwcccccccwcw",
+    "wcwwwwwcwcwwwcw",
+    "wcccccwcwcwcccw",
+    "wwwww1wcwwwcwcw",
+    "wcccccwccccewcw",
+    "wcwwwcwwwwwwwcw",
+    "w3ccccccccc2csw",
+    "wwwwwwwwwwwwwww"
+  ],
+  "desafios": [
+    {
+      "codigo": "1.1",
+      "orden": 1,
+      "titulo": "La primera caja",
+      "dificultad": "basico",
+      "enunciado": "La caja de memoria energia está vacía. El Archivista dice que la energía de la ciudad debe estar llena: guarda el número 100 en la variable energia.",
+      "codigo_base": "energia = ______",
+      "pistas": [
+        "Una variable es una caja con nombre: el signo = guarda en ella lo que escribas a la derecha.",
+        "La energía es una cantidad, así que debe ser un número, no un texto.",
+        "Los números se escriben sin comillas. Completa la línea con: energia = <número que pide el enunciado>"
+      ],
+      "pruebas": [
+        {
+          "tipo": "variables",
+          "variables": {
+            "energia": {
+              "valor": 100,
+              "tipo": "int"
+            }
+          }
+        }
+      ],
+      "xp_base": 10,
+      "solucion_referencia": "energia = 100",
+      "errores_tipicos": [
+        {
+          "descripcion": "Guarda el número como texto (entre comillas)",
+          "codigo": "energia = \"100\""
+        },
+        {
+          "descripcion": "Guarda un valor distinto",
+          "codigo": "energia = 10"
+        },
+        {
+          "descripcion": "Escribe mal el nombre de la variable",
+          "codigo": "enrgia = 100"
+        }
+      ]
+    },
+    {
+      "codigo": "1.2",
+      "orden": 2,
+      "titulo": "Tipos de datos",
+      "dificultad": "basico",
+      "enunciado": "El Archivista necesita tres cajas: el nombre del héroe (un texto), su nivel (un número entero) y su vida (un número con decimales).",
+      "codigo_base": "nombre = ______\nnivel = ______\nvida = ______",
+      "pistas": [
+        "Cada caja guarda un tipo de dato distinto: texto, número entero y número decimal.",
+        "Los textos van entre comillas; los números, sin comillas.",
+        "Un decimal usa punto: por ejemplo 2.5. El nivel es un entero, sin punto."
+      ],
+      "pruebas": [
+        {
+          "tipo": "variables",
+          "variables": {
+            "nombre": {
+              "tipo": "str"
+            },
+            "nivel": {
+              "tipo": "int"
+            },
+            "vida": {
+              "tipo": "float"
+            }
+          }
+        }
+      ],
+      "xp_base": 10,
+      "solucion_referencia": "nombre = \"Ada\"\nnivel = 1\nvida = 7.5",
+      "errores_tipicos": [
+        {
+          "descripcion": "Todo como texto",
+          "codigo": "nombre = \"Ada\"\nnivel = \"1\"\nvida = \"7.5\""
+        },
+        {
+          "descripcion": "La vida sin decimales",
+          "codigo": "nombre = \"Ada\"\nnivel = 1\nvida = 7"
+        },
+        {
+          "descripcion": "El nivel con decimales",
+          "codigo": "nombre = \"Ada\"\nnivel = 1.0\nvida = 7.5"
+        }
+      ]
+    },
+    {
+      "codigo": "1.3",
+      "orden": 3,
+      "titulo": "Operadores",
+      "dificultad": "intermedio",
+      "enunciado": "El daño de un ataque es el triple del ataque más el bonus. Las cajas ataque y bonus ya tienen sus valores: calcula dano usando esas variables.",
+      "codigo_base": "# ataque y bonus ya están en la memoria de la ciudad\ndano = ______",
+      "pistas": [
+        "Puedes usar las variables ataque y bonus dentro de una operación.",
+        "El triple de algo se escribe multiplicando por 3 con el signo *.",
+        "La forma es: dano = <ataque por 3> + <bonus>. No escribas el resultado a mano."
+      ],
+      "pruebas": [
+        {
+          "tipo": "variables",
+          "variables": {
+            "dano": {
+              "valor": "{{dano}}"
+            }
+          }
+        },
+        {
+          "tipo": "estructura",
+          "reglas": [
+            {
+              "regla": "prohibe_literal",
+              "valor": 41,
+              "mensaje": "Calcula el daño con las variables ataque y bonus, no escribas el número a mano."
+            }
+          ]
+        }
+      ],
+      "xp_base": 20,
+      "solucion_referencia": "dano = ataque * 3 + bonus",
+      "errores_tipicos": [
+        {
+          "descripcion": "Resultado escrito a mano",
+          "codigo": "dano = 41"
+        },
+        {
+          "descripcion": "Olvida el triple",
+          "codigo": "dano = ataque + bonus"
+        },
+        {
+          "descripcion": "Olvida el bonus",
+          "codigo": "dano = ataque * 3"
+        }
+      ],
+      "variantes": [
+        {
+          "preparacion": "ataque = 12\nbonus = 5",
+          "esperado": {
+            "dano": 41
+          }
+        },
+        {
+          "preparacion": "ataque = 10\nbonus = 2",
+          "esperado": {
+            "dano": 32
+          }
+        }
+      ]
+    }
+  ]
+}

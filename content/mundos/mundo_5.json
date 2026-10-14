@@ -1,0 +1,9 @@
+{
+  "$schema": "../esquemas/mundo.schema.json",
+  "codigo": "mundo_5",
+  "orden": 5,
+  "nombre": "El Núcleo: Bug Master",
+  "conceptos": "Integración y depuración: encontrar y corregir errores",
+  "descripcion": "Bug Master, la encarnación de los errores de programación, tomó el núcleo del sistema. Solo corrigiendo sus bugs se debilita.",
+  "desafios": []
+}

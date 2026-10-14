@@ -1,0 +1,229 @@
+{
+  "$schema": "../esquemas/mundo.schema.json",
+  "codigo": "mundo_2",
+  "orden": 2,
+  "nombre": "El Bosque de las Decisiones",
+  "conceptos": "Condicionales: if, elif, else y operadores de comparación",
+  "descripcion": "El bosque está bloqueado por obstáculos. La Guardiana solo deja pasar a quien sabe decidir con lógica.",
+  "funciones_juego": [
+    "avanzar",
+    "saltar",
+    "atacar",
+    "esquivar",
+    "abrir_puerta",
+    "buscar_llave",
+    "esperar"
+  ],
+  "mapa": [
+    "wwwwwwwwwwwwwwwwwwwww",
+    "wawcccwcc1ccccwccccew",
+    "wcccwewcwwwwwcwcwwwcw",
+    "wcwcwcccwcccccwcccwcw",
+    "wcccwwwwwwwcwcwwwcwcw",
+    "wcwcccwcccccwcwcccwcw",
+    "wcwwwcw2wwwcwcwcwcwcw",
+    "wcccccwcwcccwcwcwcccw",
+    "wwwwwwwcwwwwwcwcccwcw",
+    "wcccccccccccccwcwcccw",
+    "wcwwwwwwwwwcwcwcwwwcw",
+    "wc3cccccccwecccccccsw",
+    "wwwwwwwwwwwwwwwwwwwww"
+  ],
+  "desafios": [
+    {
+      "codigo": "2.1",
+      "orden": 1,
+      "titulo": "El puente",
+      "dificultad": "basico",
+      "enunciado": "El puente solo resiste a quien tiene energía de sobra. Si la energía es mayor que 50, el personaje debe avanzar.",
+      "codigo_base": "if energia > 50:\n    ______",
+      "pistas": [
+        "Lo que va dentro del if solo ocurre cuando la condición es verdadera.",
+        "Para mover al personaje hacia adelante existe una función de juego.",
+        "Dentro del if llama a la función que hace avanzar, con paréntesis al final."
+      ],
+      "pruebas": [
+        {
+          "tipo": "estado_escena",
+          "esperado": {
+            "acciones": "{{acciones}}"
+          }
+        }
+      ],
+      "xp_base": 10,
+      "solucion_referencia": "if energia > 50:\n    avanzar()",
+      "errores_tipicos": [
+        {
+          "descripcion": "Avanza sin revisar la energía",
+          "codigo": "avanzar()"
+        },
+        {
+          "descripcion": "Usa otra acción",
+          "codigo": "if energia > 50:\n    saltar()"
+        },
+        {
+          "descripcion": "Condición invertida",
+          "codigo": "if energia < 50:\n    avanzar()"
+        }
+      ],
+      "variantes": [
+        {
+          "preparacion": "energia = 100",
+          "esperado": {
+            "acciones": [
+              "avanzar"
+            ]
+          }
+        },
+        {
+          "preparacion": "energia = 30",
+          "esperado": {
+            "acciones": []
+          }
+        },
+        {
+          "preparacion": "energia = 51",
+          "esperado": {
+            "acciones": [
+              "avanzar"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "codigo": "2.2",
+      "orden": 2,
+      "titulo": "Puerta de dos caminos",
+      "dificultad": "intermedio",
+      "enunciado": "Frente a la puerta del bosque: si tienes la llave, ábrela; si no, búscala.",
+      "codigo_base": "if llave:\n    abrir_puerta()\nelse:\n    ______",
+      "pistas": [
+        "else es el camino que se toma cuando la condición del if es falsa.",
+        "Si no hay llave, no tiene sentido abrir la puerta: hay que conseguirla primero.",
+        "Dentro del else llama a la función de juego que busca la llave."
+      ],
+      "pruebas": [
+        {
+          "tipo": "estado_escena",
+          "esperado": {
+            "acciones": "{{acciones}}"
+          }
+        }
+      ],
+      "xp_base": 20,
+      "solucion_referencia": "if llave:\n    abrir_puerta()\nelse:\n    buscar_llave()",
+      "errores_tipicos": [
+        {
+          "descripcion": "Abre la puerta en ambos casos",
+          "codigo": "if llave:\n    abrir_puerta()\nelse:\n    abrir_puerta()"
+        },
+        {
+          "descripcion": "Hace las dos cosas siempre",
+          "codigo": "abrir_puerta()\nbuscar_llave()"
+        },
+        {
+          "descripcion": "Espera en lugar de buscar",
+          "codigo": "if llave:\n    abrir_puerta()\nelse:\n    esperar()"
+        }
+      ],
+      "variantes": [
+        {
+          "preparacion": "llave = True",
+          "esperado": {
+            "acciones": [
+              "abrir_puerta"
+            ]
+          }
+        },
+        {
+          "preparacion": "llave = False",
+          "esperado": {
+            "acciones": [
+              "buscar_llave"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "codigo": "2.3",
+      "orden": 3,
+      "titulo": "Tres senderos",
+      "dificultad": "intermedio",
+      "enunciado": "La Guardiana observa al lobo: si está a menos de 10 pasos, ataca; si está a menos de 20, avanza; si está más lejos, espera.",
+      "codigo_base": "if distancia < 10:\n    atacar()\nelif ______:\n    avanzar()\nelse:\n    esperar()",
+      "pistas": [
+        "elif revisa una segunda condición solo si la primera fue falsa.",
+        "Al llegar al elif ya sabes que la distancia NO es menor que 10.",
+        "Completa el elif comparando distancia con 20 usando el signo <."
+      ],
+      "pruebas": [
+        {
+          "tipo": "estado_escena",
+          "esperado": {
+            "acciones": "{{acciones}}"
+          }
+        }
+      ],
+      "xp_base": 20,
+      "solucion_referencia": "if distancia < 10:\n    atacar()\nelif distancia < 20:\n    avanzar()\nelse:\n    esperar()",
+      "errores_tipicos": [
+        {
+          "descripcion": "Comparación al revés",
+          "codigo": "if distancia < 10:\n    atacar()\nelif distancia > 20:\n    avanzar()\nelse:\n    esperar()"
+        },
+        {
+          "descripcion": "Incluye el 20",
+          "codigo": "if distancia < 10:\n    atacar()\nelif distancia <= 20:\n    avanzar()\nelse:\n    esperar()"
+        },
+        {
+          "descripcion": "Repite la primera condición",
+          "codigo": "if distancia < 10:\n    atacar()\nelif distancia < 10:\n    avanzar()\nelse:\n    esperar()"
+        }
+      ],
+      "variantes": [
+        {
+          "preparacion": "distancia = 5",
+          "esperado": {
+            "acciones": [
+              "atacar"
+            ]
+          }
+        },
+        {
+          "preparacion": "distancia = 15",
+          "esperado": {
+            "acciones": [
+              "avanzar"
+            ]
+          }
+        },
+        {
+          "preparacion": "distancia = 25",
+          "esperado": {
+            "acciones": [
+              "esperar"
+            ]
+          }
+        },
+        {
+          "preparacion": "distancia = 10",
+          "esperado": {
+            "acciones": [
+              "avanzar"
+            ]
+          }
+        },
+        {
+          "preparacion": "distancia = 20",
+          "esperado": {
+            "acciones": [
+              "esperar"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+.editor {
+  border: 2px solid var(--color-borde);
+  border-radius: var(--radio-md);
+  overflow: hidden;
+  min-height: 12rem;
+}
+
+.editor:focus-within {
+  border-color: var(--color-primario);
+  box-shadow: var(--sombra-neon);
+}
+
+.editor :global(.cm-editor) {
+  min-height: 12rem;
+}
+
+.editor :global(.cm-editor.cm-focused) {
+  outline: none; /* el foco se muestra en el contenedor */
+}

@@ -1,0 +1,25 @@
+.control {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-1);
+}
+
+.silencio {
+  min-width: var(--alto-toque-minimo);
+  min-height: var(--alto-toque-minimo);
+  border: 1px solid transparent;
+  border-radius: var(--radio-md);
+  background: transparent;
+  font-size: var(--texto-lg);
+  cursor: pointer;
+}
+
+.silencio:hover,
+.silencio[aria-pressed='true'] {
+  border-color: var(--color-borde);
+}
+
+.deslizador {
+  width: 5rem;
+  accent-color: var(--color-primario);
+}

@@ -1,0 +1,113 @@
+/*
+ * Design tokens de CODEQUEST. Única fuente de colores, tipografía, espacios, radios, sombras y tiempos.
+ * Estética neón-retro amigable: fondos oscuros con acentos de color. Todos los pares texto/fondo
+ * cumplen WCAG AA (contraste ≥ 4.5:1); lo verifica src/estilos/contraste.test.ts.
+ */
+:root {
+  /* --- Color base (interfaz general) --- */
+  --color-fondo: #0b1020;
+  --color-superficie: #141a33;
+  --color-superficie-alta: #1d2547;
+  --color-borde: #3a4680;
+  --color-texto: #e8ecff;
+  --color-texto-suave: #a9b3d9;
+  --color-primario: #22d3ee;
+  --color-primario-texto: #04131a;
+  --color-acento: #f0abfc;
+  --color-exito: #4ade80;
+  --color-error: #fca5a5;
+  --color-aviso: #fcd34d;
+  --color-foco: #fde047;
+
+  /* --- Tipografía (OFL 1.1, servidas localmente: ver CREDITS.md) --- */
+  --fuente-titulo: 'Press Start 2P', ui-monospace, monospace; /* solo títulos */
+  --fuente-ui: 'Inter Variable', system-ui, sans-serif;
+  --fuente-codigo: 'JetBrains Mono Variable', ui-monospace, monospace;
+  --texto-xs: 0.75rem;
+  --texto-sm: 0.875rem;
+  --texto-md: 1rem;
+  --texto-lg: 1.25rem;
+  --texto-xl: 1.75rem;
+  --texto-titulo: 2rem;
+
+  /* --- Espaciado (escala de 4 px) --- */
+  --espacio-1: 0.25rem;
+  --espacio-2: 0.5rem;
+  --espacio-3: 0.75rem;
+  --espacio-4: 1rem;
+  --espacio-6: 1.5rem;
+  --espacio-8: 2rem;
+  --espacio-12: 3rem;
+
+  /* --- Forma y profundidad --- */
+  --radio-sm: 4px;
+  --radio-md: 8px;
+  --radio-lg: 16px;
+  --radio-pildora: 999px;
+  --sombra-tarjeta: 0 8px 24px rgb(0 0 0 / 0.35);
+  --sombra-neon: 0 0 0 1px var(--color-primario), 0 0 16px rgb(34 211 238 / 0.35);
+
+  /* --- Movimiento (se anulan con prefers-reduced-motion) --- */
+  --duracion-rapida: 120ms;
+  --duracion-media: 240ms;
+  --duracion-lenta: 600ms;
+  --curva-suave: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  /* --- Medidas de la interfaz --- */
+  --ancho-contenido: 72rem;
+  --ancho-formulario: 28rem;
+  --alto-toque-minimo: 44px; /* objetivo táctil mínimo recomendado */
+}
+
+/*
+ * Paletas por mundo: se activan con data-mundo="N" en un contenedor.
+ * Criterio: el color primario identifica el concepto del mundo y el acento contrasta con él para
+ * resaltar recompensas e interacción. Los fondos se oscurecen hacia el tono del ambiente.
+ */
+[data-mundo='1'] {
+  /* Ciudad de las Variables: ciudad futurista nocturna */
+  --color-primario: #22d3ee;
+  --color-acento: #f0abfc;
+  --color-fondo: #0b1020;
+  --color-superficie: #141a33;
+}
+
+[data-mundo='2'] {
+  /* Bosque de las Decisiones: bosque bioluminiscente */
+  --color-primario: #34d399;
+  --color-acento: #fbbf24;
+  --color-fondo: #07150f;
+  --color-superficie: #0f241b;
+}
+
+[data-mundo='3'] {
+  /* Minas de los Bucles: cuevas con cristales */
+  --color-primario: #c4b5fd;
+  --color-acento: #fb923c;
+  --color-fondo: #120b1f;
+  --color-superficie: #1e1433;
+}
+
+[data-mundo='4'] {
+  /* Reino de las Funciones: castillo y torres modulares */
+  --color-primario: #fcd34d;
+  --color-acento: #93c5fd;
+  --color-fondo: #16120a;
+  --color-superficie: #251e10;
+}
+
+[data-mundo='5'] {
+  /* Núcleo de Bug Master: sistema corrupto con glitch */
+  --color-primario: #fb7185;
+  --color-acento: #4ade80;
+  --color-fondo: #14070b;
+  --color-superficie: #240d14;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duracion-rapida: 0ms;
+    --duracion-media: 0ms;
+    --duracion-lenta: 0ms;
+  }
+}

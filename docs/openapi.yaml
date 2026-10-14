@@ -1,0 +1,879 @@
+openapi: 3.0.3
+info:
+  title: CODEQUEST API
+  version: 1.0.0
+  description: API de la plataforma educativa CODEQUEST — La aventura del programador.
+paths:
+  /api/v1/auth/login/:
+    post:
+      operationId: auth_login_create
+      summary: Iniciar sesión
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+        required: true
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sesion'
+          description: ''
+  /api/v1/auth/logout/:
+    post:
+      operationId: auth_logout_create
+      summary: Cerrar sesión
+      parameters:
+      - in: header
+        name: X-CodeQuest-Cliente
+        schema:
+          type: string
+        description: Debe valer "web".
+        required: true
+      tags:
+      - auth
+      responses:
+        '204':
+          description: No response body
+  /api/v1/auth/refresh/:
+    post:
+      operationId: auth_refresh_create
+      summary: Renovar el access token (usa la cookie HttpOnly)
+      parameters:
+      - in: header
+        name: X-CodeQuest-Cliente
+        schema:
+          type: string
+        description: Debe valer "web".
+        required: true
+      tags:
+      - auth
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Access'
+          description: ''
+  /api/v1/auth/registro/:
+    post:
+      operationId: auth_registro_create
+      summary: Crear cuenta
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistroRequest'
+        required: true
+      security:
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sesion'
+          description: ''
+  /api/v1/desafios/{id}/:
+    get:
+      operationId: desafios_retrieve
+      summary: Detalle de un desafío (sin la solución de referencia)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - desafios
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DesafioDetalle'
+          description: ''
+  /api/v1/desafios/{id}/intentos/:
+    post:
+      operationId: desafios_intentos_create
+      summary: Registrar un intento de un desafío
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - desafios
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IntentoEntradaRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntentoRespuesta'
+          description: ''
+  /api/v1/logros/:
+    get:
+      operationId: logros_list
+      summary: Catálogo de logros con los que ya obtuvo el usuario
+      tags:
+      - logros
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LogroDelUsuario'
+          description: ''
+  /api/v1/mundos/:
+    get:
+      operationId: mundos_list
+      summary: Mundos con su estado para el usuario
+      tags:
+      - mundos
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Mundo'
+          description: ''
+  /api/v1/mundos/{id}/:
+    get:
+      operationId: mundos_retrieve
+      summary: Laberinto de un mundo desbloqueado, con sus obstáculos y cuáles están
+        resueltos
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - mundos
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MundoLaberinto'
+          description: ''
+  /api/v1/mundos/{id}/completar/:
+    post:
+      operationId: mundos_completar_create
+      summary: Completar el laberinto (todos los obstáculos resueltos) y desbloquear
+        el siguiente mundo
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - mundos
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompletarMundoRespuesta'
+          description: ''
+  /api/v1/mundos/{id}/desafios/:
+    get:
+      operationId: mundos_desafios_list
+      summary: Desafíos de un mundo desbloqueado
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - mundos
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DesafioResumen'
+          description: ''
+  /api/v1/mundos/{id}/reiniciar/:
+    post:
+      operationId: mundos_reiniciar_create
+      summary: Reiniciar el laberinto tras un game over (los obstáculos vuelven a
+        aparecer)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - mundos
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Progreso'
+          description: ''
+  /api/v1/perfil/:
+    get:
+      operationId: perfil_retrieve
+      description: 'Perfil del usuario autenticado. No recibe id: nadie puede ver
+        o editar el perfil de otro.'
+      tags:
+      - perfil
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Perfil'
+          description: ''
+    patch:
+      operationId: perfil_partial_update
+      description: 'Perfil del usuario autenticado. No recibe id: nadie puede ver
+        o editar el perfil de otro.'
+      tags:
+      - perfil
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPerfilRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Perfil'
+          description: ''
+  /api/v1/salud/:
+    get:
+      operationId: salud_retrieve
+      description: Indica si la API y la base de datos responden. Lo usan Docker y
+        el monitoreo.
+      summary: Estado del servicio
+      tags:
+      - salud
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Salud'
+          description: ''
+components:
+  schemas:
+    Access:
+      type: object
+      properties:
+        access:
+          type: string
+      required:
+      - access
+    AvatarEnum:
+      enum:
+      - byte
+      - pixel
+      - chispa
+      type: string
+      description: |-
+        * `byte` - Byte
+        * `pixel` - Pixel
+        * `chispa` - Chispa
+    CompletarMundoRespuesta:
+      type: object
+      properties:
+        siguiente_mundo:
+          allOf:
+          - $ref: '#/components/schemas/MundoSiguiente'
+          nullable: true
+        recompensa:
+          $ref: '#/components/schemas/Recompensa'
+      required:
+      - recompensa
+      - siguiente_mundo
+    DesafioDetalle:
+      type: object
+      description: Lo necesario para resolver y evaluar en el navegador, y nada más.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        codigo:
+          type: string
+          description: 'Ej.: "1.1"'
+          maxLength: 20
+        orden:
+          type: integer
+          maximum: 32767
+          minimum: 0
+        titulo:
+          type: string
+          maxLength: 120
+        dificultad:
+          $ref: '#/components/schemas/DificultadEnum'
+        enunciado:
+          type: string
+        codigo_base:
+          type: string
+        pistas:
+          description: Lista de pistas, de menos a más reveladora.
+        pruebas:
+          description: Pruebas del evaluador (ver content/esquemas).
+        variantes:
+          description: 'Variantes: preparacion (Python), entradas y esperado.'
+        xp_base:
+          type: integer
+          maximum: 32767
+          minimum: 0
+        mundo:
+          allOf:
+          - $ref: '#/components/schemas/MundoReferencia'
+          readOnly: true
+        funciones_juego:
+          type: array
+          items:
+            type: string
+      required:
+      - codigo
+      - codigo_base
+      - dificultad
+      - enunciado
+      - funciones_juego
+      - id
+      - mundo
+      - orden
+      - pistas
+      - pruebas
+      - titulo
+      - xp_base
+    DesafioResumen:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        codigo:
+          type: string
+          description: 'Ej.: "1.1"'
+          maxLength: 20
+        orden:
+          type: integer
+          maximum: 32767
+          minimum: 0
+        titulo:
+          type: string
+          maxLength: 120
+        dificultad:
+          $ref: '#/components/schemas/DificultadEnum'
+        xp_base:
+          type: integer
+          maximum: 32767
+          minimum: 0
+      required:
+      - codigo
+      - dificultad
+      - id
+      - orden
+      - titulo
+      - xp_base
+    DificultadEnum:
+      enum:
+      - basico
+      - intermedio
+      - avanzado
+      - jefe
+      type: string
+      description: |-
+        * `basico` - Básico
+        * `intermedio` - Intermedio
+        * `avanzado` - Avanzado
+        * `jefe` - Jefe de mundo
+    EstadoEnum:
+      enum:
+      - bloqueado
+      - desbloqueado
+      - completado
+      type: string
+      description: |-
+        * `bloqueado` - Bloqueado
+        * `desbloqueado` - Desbloqueado
+        * `completado` - Completado
+    IntentoEntradaRequest:
+      type: object
+      description: Lo que envía el navegador tras evaluar el código. XP y progreso
+        los decide el servidor.
+      properties:
+        codigo_enviado:
+          type: string
+          minLength: 1
+          maxLength: 10000
+        resultado:
+          $ref: '#/components/schemas/ResultadoEnum'
+        tipo_error:
+          type: string
+          default: ''
+          maxLength: 40
+        pistas_usadas:
+          type: integer
+          maximum: 3
+          minimum: 0
+          default: 0
+        tiempo_ms:
+          type: integer
+          maximum: 1800000
+          minimum: 0
+      required:
+      - codigo_enviado
+      - resultado
+      - tiempo_ms
+    IntentoRespuesta:
+      type: object
+      properties:
+        resultado:
+          $ref: '#/components/schemas/ResultadoEnum'
+        desafio_resuelto:
+          type: boolean
+        xp_otorgada:
+          type: integer
+        progreso:
+          $ref: '#/components/schemas/Progreso'
+        recompensa:
+          $ref: '#/components/schemas/Recompensa'
+      required:
+      - desafio_resuelto
+      - progreso
+      - recompensa
+      - resultado
+      - xp_otorgada
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          minLength: 1
+          maxLength: 254
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+          maxLength: 128
+      required:
+      - email
+      - password
+    LogroDelUsuario:
+      type: object
+      description: 'Logro del catálogo con su estado para el usuario (`fechas`: {logro_id:
+        fecha} en el contexto).'
+      properties:
+        codigo:
+          type: string
+          maxLength: 40
+          pattern: ^[-a-zA-Z0-9_]+$
+        nombre:
+          type: string
+          maxLength: 60
+        descripcion:
+          type: string
+          maxLength: 200
+        icono:
+          type: string
+          description: Ruta pública del icono en el frontend (img/logros/...).
+          maxLength: 120
+        obtenido:
+          type: boolean
+          readOnly: true
+        fecha_obtencion:
+          type: string
+          format: date-time
+          nullable: true
+          readOnly: true
+      required:
+      - codigo
+      - descripcion
+      - fecha_obtencion
+      - icono
+      - nombre
+      - obtenido
+    LogroResumen:
+      type: object
+      properties:
+        codigo:
+          type: string
+        nombre:
+          type: string
+        descripcion:
+          type: string
+        icono:
+          type: string
+      required:
+      - codigo
+      - descripcion
+      - icono
+      - nombre
+    Mundo:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        codigo:
+          type: string
+          description: Clave estable usada por el contenido.
+          maxLength: 40
+          pattern: ^[-a-zA-Z0-9_]+$
+        orden:
+          type: integer
+          maximum: 32767
+          minimum: 0
+        nombre:
+          type: string
+          maxLength: 80
+        conceptos:
+          type: string
+          maxLength: 200
+        descripcion:
+          type: string
+        estado:
+          allOf:
+          - $ref: '#/components/schemas/EstadoEnum'
+          readOnly: true
+        porcentaje:
+          type: integer
+          readOnly: true
+      required:
+      - codigo
+      - conceptos
+      - descripcion
+      - estado
+      - id
+      - nombre
+      - orden
+      - porcentaje
+    MundoLaberinto:
+      type: object
+      description: 'El mundo con su laberinto. El mapa no revela nada secreto: es
+        lo que el jugador va a recorrer.'
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        codigo:
+          type: string
+          description: Clave estable usada por el contenido.
+          maxLength: 40
+          pattern: ^[-a-zA-Z0-9_]+$
+        orden:
+          type: integer
+          maximum: 32767
+          minimum: 0
+        nombre:
+          type: string
+          maxLength: 80
+        conceptos:
+          type: string
+          maxLength: 200
+        descripcion:
+          type: string
+        estado:
+          allOf:
+          - $ref: '#/components/schemas/EstadoEnum'
+          readOnly: true
+        porcentaje:
+          type: integer
+          readOnly: true
+        mapa:
+          type: array
+          items:
+            type: string
+        obstaculos:
+          type: array
+          items:
+            $ref: '#/components/schemas/Obstaculo'
+          readOnly: true
+      required:
+      - codigo
+      - conceptos
+      - descripcion
+      - estado
+      - id
+      - mapa
+      - nombre
+      - obstaculos
+      - orden
+      - porcentaje
+    MundoReferencia:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        codigo:
+          type: string
+          description: Clave estable usada por el contenido.
+          maxLength: 40
+          pattern: ^[-a-zA-Z0-9_]+$
+        orden:
+          type: integer
+          maximum: 32767
+          minimum: 0
+      required:
+      - codigo
+      - id
+      - orden
+    MundoSiguiente:
+      type: object
+      properties:
+        id:
+          type: integer
+        nombre:
+          type: string
+      required:
+      - id
+      - nombre
+    Obstaculo:
+      type: object
+      properties:
+        simbolo:
+          type: string
+          description: Dígito del mapa (orden del desafío).
+        desafio_id:
+          type: integer
+        codigo:
+          type: string
+        titulo:
+          type: string
+        dificultad:
+          type: string
+        resuelto:
+          type: boolean
+      required:
+      - codigo
+      - desafio_id
+      - dificultad
+      - resuelto
+      - simbolo
+      - titulo
+    PatchedPerfilRequest:
+      type: object
+      properties:
+        apodo:
+          type: string
+          minLength: 2
+          pattern: ^[\w .\-]+$
+          maxLength: 30
+        avatar:
+          $ref: '#/components/schemas/AvatarEnum'
+    Perfil:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          readOnly: true
+        rol:
+          type: string
+          readOnly: true
+        fecha_registro:
+          type: string
+          format: date-time
+          readOnly: true
+        apodo:
+          type: string
+          pattern: ^[\w .\-]+$
+          maxLength: 30
+          minLength: 2
+        avatar:
+          $ref: '#/components/schemas/AvatarEnum'
+        experiencia:
+          type: integer
+          readOnly: true
+        puntos:
+          type: integer
+          readOnly: true
+        nivel:
+          type: integer
+          readOnly: true
+        experiencia_nivel_actual:
+          type: integer
+          readOnly: true
+        experiencia_siguiente_nivel:
+          type: integer
+          readOnly: true
+        energia:
+          type: integer
+          readOnly: true
+      required:
+      - email
+      - energia
+      - experiencia
+      - experiencia_nivel_actual
+      - experiencia_siguiente_nivel
+      - fecha_registro
+      - nivel
+      - puntos
+      - rol
+    Progreso:
+      type: object
+      properties:
+        estado:
+          $ref: '#/components/schemas/EstadoEnum'
+        porcentaje:
+          type: integer
+          maximum: 32767
+          minimum: 0
+        desafios_completados:
+          type: integer
+          maximum: 32767
+          minimum: 0
+        total_desafios:
+          type: integer
+      required:
+      - total_desafios
+    Recompensa:
+      type: object
+      description: XP, nivel, puntos y logros decididos por el servidor tras un evento
+        del juego.
+      properties:
+        xp_otorgada:
+          type: integer
+        puntos_otorgados:
+          type: integer
+        experiencia:
+          type: integer
+        puntos:
+          type: integer
+        nivel:
+          type: integer
+        subio_de_nivel:
+          type: boolean
+        logros_nuevos:
+          type: array
+          items:
+            $ref: '#/components/schemas/LogroResumen'
+        experiencia_nivel_actual:
+          type: integer
+        experiencia_siguiente_nivel:
+          type: integer
+      required:
+      - experiencia
+      - experiencia_nivel_actual
+      - experiencia_siguiente_nivel
+      - logros_nuevos
+      - nivel
+      - puntos
+      - puntos_otorgados
+      - subio_de_nivel
+      - xp_otorgada
+    RegistroRequest:
+      type: object
+      description: 'Solo acepta estos campos: rol, XP o nivel enviados por el cliente
+        se ignoran.'
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 1
+          maxLength: 254
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+          maxLength: 128
+        apodo:
+          type: string
+          minLength: 2
+          pattern: ^[\w .\-]+$
+          maxLength: 30
+        avatar:
+          allOf:
+          - $ref: '#/components/schemas/AvatarEnum'
+          default: byte
+        acepta_privacidad:
+          type: boolean
+      required:
+      - acepta_privacidad
+      - apodo
+      - email
+      - password
+    ResultadoEnum:
+      enum:
+      - correcto
+      - incorrecto
+      - error
+      type: string
+      description: |-
+        * `correcto` - Correcto
+        * `incorrecto` - Incorrecto
+        * `error` - Error de ejecución
+    Salud:
+      type: object
+      properties:
+        estado:
+          type: string
+        base_de_datos:
+          type: string
+      required:
+      - base_de_datos
+      - estado
+    Sesion:
+      type: object
+      description: Respuesta de registro y login (solo para la documentación OpenAPI).
+      properties:
+        access:
+          type: string
+        perfil:
+          $ref: '#/components/schemas/Perfil'
+      required:
+      - access
+      - perfil
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

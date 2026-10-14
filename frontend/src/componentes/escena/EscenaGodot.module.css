@@ -1,0 +1,15 @@
+.escena {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 2px solid var(--color-borde);
+  border-radius: var(--radio-lg);
+  background: var(--color-fondo);
+}
+
+.escena:focus-visible,
+.escena:focus-within {
+  border-color: var(--color-primario);
+  box-shadow: var(--sombra-neon);
+  outline: none;
+}
