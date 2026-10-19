@@ -1,10 +1,10 @@
 from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import extend_schema
-from rest_framework.exceptions import PermissionDenied
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.response import Response
 
-from apps.progreso.servicios import desafios_resueltos, estado_de_mundo, estados_de_mundos
+from apps.progreso.acceso import exigir_mundo_accesible
+from apps.progreso.servicios import desafios_resueltos, estados_de_mundos
 
 from .models import Desafio, Mundo
 from .serializers import (
@@ -13,14 +13,6 @@ from .serializers import (
     MundoLaberintoSerializer,
     MundoSerializer,
 )
-
-MENSAJE_MUNDO_BLOQUEADO = "Este mundo aún está bloqueado. Completa el mundo anterior para entrar."
-
-
-def exigir_mundo_accesible(usuario, mundo: Mundo) -> None:
-    if not estado_de_mundo(usuario, mundo).accesible:
-        raise PermissionDenied(MENSAJE_MUNDO_BLOQUEADO)
-
 
 @extend_schema(summary="Mundos con su estado para el usuario")
 class VistaMundos(ListAPIView):

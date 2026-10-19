@@ -37,5 +37,5 @@ Thumbs.db
 # --- Godot (ejecutables y plantillas: no van en el repositorio) ---
 Godot_v*.exe
 *.tpz
-game/.godot/
-game/build/
+frontend/godot/.godot/
+frontend/godot/build/

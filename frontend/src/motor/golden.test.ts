@@ -28,7 +28,7 @@ interface MundoContenido {
   desafios: DesafioContenido[]
 }
 
-const CARPETA_MUNDOS = resolve(process.cwd(), '../content/mundos')
+const CARPETA_MUNDOS = resolve(process.cwd(), '../backend/content/mundos')
 const mundos: MundoContenido[] = readdirSync(CARPETA_MUNDOS)
   .filter((archivo) => archivo.endsWith('.json'))
   .map((archivo) => JSON.parse(readFileSync(resolve(CARPETA_MUNDOS, archivo), 'utf8')) as MundoContenido)

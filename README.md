@@ -8,16 +8,28 @@ Universidad Cooperativa de Colombia (Villavicencio).
 
 ## Arquitectura (resumen)
 
-Monolito modular:
+Cliente-servidor híbrido con backend **monolito modular en capas** (presentación → lógica → datos);
+las capas y sus reglas, verificadas por pruebas, están en [ADR-0006](docs/adr/0006-arquitectura-en-capas.md).
 
-| Carpeta     | Contenido                                                                 |
-|-------------|---------------------------------------------------------------------------|
-| `backend/`  | API REST con Django 5.2 LTS + Django REST Framework (Python 3.13, venv)  |
-| `frontend/` | SPA con React + Vite + TypeScript: cuentas, editor, ejecución de Python con Pyodide (Web Worker), mapa y perfil |
-| `game/`     | Proyecto Godot 4.7 (GDScript): escenas de los mundos, personajes, efectos y audio; se exporta a web y se incrusta en el frontend |
-| `content/`  | Mundos, desafíos, diálogos y logros como datos versionados (JSON)         |
-| `assets/`   | Audio, imágenes y video con su manifiesto de licencias                    |
-| `docs/`     | Convenciones, decisiones de arquitectura (ADR) y documentación            |
+```
+codesquest/
+├── backend/                Servidor: API REST con Django 5.2 LTS + DRF (Python 3.13)
+│   ├── apps/               usuarios · contenido · progreso · gamificacion · nucleo
+│   ├── config/             settings y constantes de juego (juego.py)
+│   ├── content/            mundos, desafíos y logros como datos (JSON validado por esquema)
+│   ├── compartido/python/  reglas de estructura (AST): las usa Django y también el navegador
+│   └── herramientas/       generar_laberintos.py
+├── frontend/               Navegador: React + Vite + TypeScript
+│   ├── src/                plataforma, editor y motor de Python (Pyodide en un Web Worker)
+│   ├── public/             estáticos; juego/ = exportación web de Godot (generada)
+│   └── godot/              proyecto Godot 4.7 (GDScript): laberintos, personajes, efectos y audio
+├── docs/                   convenciones, ADR, aviso de privacidad y OpenAPI
+├── assets/                 recursos originales (Kenney, CC0) de donde se copian sprites y sonidos
+└── docker-compose.yml      PostgreSQL 18
+```
+
+`frontend/` lee de `backend/` solo dos cosas: las reglas de `backend/compartido/` (el navegador
+evalúa con las mismas reglas que revalida el servidor) y `backend/content/` en las pruebas golden.
 
 El código de los estudiantes **nunca** se ejecuta en el servidor (ver `docs/adr/`).
 
@@ -54,7 +66,7 @@ Con el `venv` activado y la base de datos arriba (`docker compose up -d db`):
 ```bash
 cd backend
 python manage.py migrate
-python manage.py cargar_contenido          # mundos, desafíos y logros desde content/ (idempotente)
+python manage.py cargar_contenido          # mundos, desafíos y logros desde backend/content/ (idempotente)
 python manage.py createsuperuser        # cuenta de docente_admin para /admin/
 python manage.py runserver 127.0.0.1:8000
 ```
@@ -117,10 +129,10 @@ npm run dev            # http://127.0.0.1:5173  (proxy de /api hacia Django)
 
 | Comando | Para qué |
 |---------|----------|
-| `npm test` | Pruebas (Vitest + Testing Library): contraste WCAG AA, motor de Python y **golden tests** de todos los desafíos de `content/` |
+| `npm test` | Pruebas (Vitest + Testing Library): contraste WCAG AA, motor de Python y **golden tests** de todos los desafíos de `backend/content/` |
 | `npm run lint` | oxlint |
 | `npm run build` | Verificación de tipos (TypeScript estricto) y build de producción |
-| `npm run exportar:juego` | Exporta la escena de Godot (`game/`) a `public/juego/`. Ejecútalo tras cambiar algo en Godot (usa `GODOT_BIN` o el ejecutable de la raíz) |
+| `npm run exportar:juego` | Exporta la escena de Godot (`frontend/godot/`) a `public/juego/`. Ejecútalo tras cambiar algo en Godot (usa `GODOT_BIN` o el ejecutable de la raíz) |
 | `npm run generar:tipos` | Regenera `src/api/esquema.d.ts` desde `docs/openapi.yaml` (tras cambiar la API) |
 
 `npm run dev` y `npm run build` copian primero Pyodide a `public/pyodide/` (servido localmente, sin CDN).
@@ -131,27 +143,19 @@ Para actualizar los tipos tras un cambio del backend:
 
 ### Juego (Godot)
 
-1. Abre Godot 4.7.2 → **Importar** → selecciona `game/project.godot`.
-2. Abre `escenas/escena_laberinto.tscn`, elige en el Inspector **Mundo En Editor** (0-4) y **Avatar En
-   Editor**, y pulsa **F6**. Flechas/WASD para moverte, **Espacio** para disparar; frente a un
-   candado, **Enter** lo "resuelve" (solo en el editor, para probar sin la página).
-   Los mapas se regeneran con `python herramientas/generar_laberintos.py`.
-3. Para verlo dentro de la app: `npm run exportar:juego` (en `frontend/`).
-3. Pruebas (GUT 9.7.1), desde la raíz del proyecto:
+1. Abre Godot 4.7.2 → **Importar** → selecciona `frontend/godot/project.godot`.
+2. Abre `escenas/escena_laberinto.tscn`, elige en el Inspector **Mundo En Editor** (0-5) y **Avatar En
+   Editor**: el laberinto se ve en la vista 2D (nodo `VistaPrevia`). Pulsa **F6** para jugarlo.
+   Flechas/WASD para moverte, **Espacio** para disparar; frente a un candado, **Enter** lo
+   "resuelve" y tras un game over reinicia (solo en el editor, para probar sin la página).
+   Los mapas se regeneran con `python backend/herramientas/generar_laberintos.py`.
+3. Para verlo dentro de la app: `npm run exportar:juego` (en `frontend/`). Es la única exportación:
+   la web la sirve desde `frontend/public/juego/` y se comunica con ella por el puente (`PuenteWeb`).
+4. Pruebas (GUT 9.7.1), desde la raíz del proyecto:
 
 ```bash
-<ruta>/Godot_v4.7.2-stable_win64_console.exe --headless --path game -s addons/gut/gut_cmdln.gd -gdir=res://tests -ginclude_subdirs -gexit
+<ruta>/Godot_v4.7.2-stable_win64_console.exe --headless --path frontend/godot -s addons/gut/gut_cmdln.gd -gdir=res://tests -ginclude_subdirs -gexit
 ```
-
-4. Exportación web y prueba del puente React ↔ Godot:
-
-```bash
-<ruta>/Godot_v4.7.2-stable_win64_console.exe --headless --path game --export-release "Web" build/web/index.html
-python -m http.server 8060 --bind 127.0.0.1 --directory game
-# Abrir http://127.0.0.1:8060/herramientas/prueba_puente.html
-```
-
-Los pasos para levantar el backend y el frontend se agregan a medida que se construyen.
 
 ## Documentación
 
@@ -159,6 +163,6 @@ Los pasos para levantar el backend y el frontend se agregan a medida que se cons
 - [Decisiones de arquitectura (ADR)](docs/adr/)
 - [Aviso de privacidad (Ley 1581)](docs/legal/aviso_privacidad.md). Si cambia su texto, sube
   `VERSION_AVISO_PRIVACIDAD` en `backend/config/settings/base.py` para pedir de nuevo el consentimiento.
-- [Contenido del juego (formato de mundos y desafíos)](content/README.md)
+- [Contenido del juego (formato de mundos y desafíos)](backend/content/README.md)
 - [Cambios para el documento académico](docs/CAMBIOS_DOCUMENTO_ACADEMICO.md)
 - [Créditos y licencias de recursos](CREDITS.md) · [Recursos pendientes](ASSETS_TODO.md)

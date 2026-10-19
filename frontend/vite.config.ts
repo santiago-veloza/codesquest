@@ -16,7 +16,7 @@ export default defineConfig({
     proxy: { '/api': { target: BACKEND_DESARROLLO } },
     fs: {
       // Fuentes únicas fuera de frontend/: el aviso de privacidad y las reglas AST compartidas.
-      allow: [searchForWorkspaceRoot(process.cwd()), '../docs/legal', '../compartido/python'],
+      allow: [searchForWorkspaceRoot(process.cwd()), '../docs/legal', '../backend/compartido/python'],
     },
   },
   test: {

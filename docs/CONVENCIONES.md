@@ -35,10 +35,12 @@ Commits pequeños: un cambio lógico por commit.
 
 - Sin números ni textos "mágicos": las constantes de juego (XP, umbrales, tiempos) van en un único
   archivo de configuración.
-- El contenido del juego vive en `content/`, no dentro de componentes.
+- El contenido del juego vive en `backend/content/`, no dentro de componentes.
 - Cada funcionalidad se entrega con sus pruebas.
 - Nunca se suben `.env`, claves ni datos personales.
 
 ## Decisiones de arquitectura (ADR)
 
 Cada decisión relevante se registra en `docs/adr/NNNN-titulo.md` usando `docs/adr/plantilla.md`.
+Las capas del código y sus reglas están en `docs/adr/0006-arquitectura-en-capas.md`: si una prueba
+de arquitectura falla, se corrige la dependencia en lugar de agregar una excepción.

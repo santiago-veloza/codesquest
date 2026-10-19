@@ -40,7 +40,7 @@ export const MOTOR = {
   limiteCargaMs: 60_000,
   /** Caracteres máximos de salida (protege contra print dentro de un bucle infinito). */
   limiteSalida: 10_000,
-  /** Debe coincidir con MAX_ACCIONES de game/scripts/config/config_escena.gd. */
+  /** Acciones de juego máximas que el arnés registra por ejecución (las comparan las pruebas "estado_escena"). */
   limiteAcciones: 500,
   /** Marca del hueco que completa el estudiante en el código base. */
   marcaHueco: '______',

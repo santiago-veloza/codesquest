@@ -10,7 +10,7 @@ laberinto y encontrar obstáculos que solo se superan programando. Antes, entrar
 solo una lista de desafíos.
 
 ## Decisión
-- **Cada mundo (1 a 4) tiene un laberinto** definido como datos en `content/mundos/mundo_N.json`
+- **Cada mundo (1 a 4) tiene un laberinto** definido como datos en `backend/content/mundos/mundo_N.json`
   (campo `mapa`; leyenda `w` pared, `c` camino, `a` inicio, `s` salida, `1-9` obstáculo = desafío con
   ese orden). Dificultad creciente: 15×11, 21×13, 27×15 y 33×17 casillas; 3 desafíos por mundo.
 - **El jugador se mueve con flechas o WASD** en la escena de Godot (vista desde arriba, cámara que lo
@@ -34,7 +34,7 @@ solo una lista de desafíos.
   "cada obstáculo es obligatorio" a **"el laberinto se puede terminar"** (cada obstáculo es
   alcanzable y, con los 3 resueltos, se llega a la salida). La salida sigue cerrada hasta resolver
   los 3 desafíos, y el servidor solo completa el mundo con los 3 intentos correctos guardados.
-- Generador reproducible en `herramientas/generar_laberintos.py`; usa la MISMA función de validación
+- Generador reproducible en `backend/herramientas/generar_laberintos.py`; usa la MISMA función de validación
   del servidor (`apps/contenido/laberinto.se_puede_terminar`). Detectó y evitó un mapa imposible
   (obstáculo detrás de la salida cerrada).
 
@@ -49,7 +49,7 @@ solo una lista de desafíos.
 ## Consecuencias
 - Nuevos endpoints: `GET /mundos/{id}/` (mapa + obstáculos resueltos), `POST /desafios/{id}/intentos/`
   y `POST /mundos/{id}/completar/`.
-- Las reglas de estructura (AST) se movieron a `compartido/python/reglas_estructura.py`: la usan el
+- Las reglas de estructura (AST) se movieron a `backend/compartido/python/reglas_estructura.py`: la usan el
   navegador y el servidor (que revalida los intentos correctos sin ejecutar código).
 - El Mundo 5 (Bug Master) queda sin laberinto hasta el Sprint 4: se muestra la lista de desafíos.
 - Accesibilidad: el canvas de Godot no es accesible para lectores de pantalla; la página ofrece la

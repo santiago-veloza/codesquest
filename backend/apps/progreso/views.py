@@ -7,9 +7,9 @@ from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.views import APIView
 
 from apps.contenido.models import Desafio, Mundo
-from apps.contenido.views import exigir_mundo_accesible
 
 from . import servicios
+from .acceso import exigir_mundo_accesible
 from .serializers import (
     CompletarMundoRespuestaSerializer,
     IntentoEntradaSerializer,

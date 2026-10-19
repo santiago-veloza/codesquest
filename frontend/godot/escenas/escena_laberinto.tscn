@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://bdcmx1uigg6ij"]
+
+[ext_resource type="Script" uid="uid://d3nyvoqgavm23" path="res://scripts/laberinto/escena_laberinto.gd" id="1"]
+[ext_resource type="Script" uid="uid://cvw1t8o74vg0e" path="res://scripts/laberinto/tablero.gd" id="2"]
+[ext_resource type="Script" uid="uid://ctdhd3llyqrns" path="res://scripts/laberinto/jugador.gd" id="3"]
+[ext_resource type="Script" uid="uid://cnm3htvox3e55" path="res://scripts/laberinto/minimapa.gd" id="4"]
+[ext_resource type="Script" uid="uid://dieud57sc4xxk" path="res://scripts/web/puente_web.gd" id="5"]
+[ext_resource type="Script" uid="uid://csh08cejmvfmf" path="res://scripts/laberinto/vista_previa.gd" id="6"]
+
+[node name="EscenaLaberinto" type="Node2D" unique_id=381895591]
+script = ExtResource("1")
+mundo_en_editor = 5
+
+[node name="Tablero" type="Node2D" parent="." unique_id=780514385]
+script = ExtResource("2")
+
+[node name="VistaPrevia" type="Node2D" parent="." unique_id=1543984881]
+script = ExtResource("6")
+
+[node name="Obstaculos" type="Node2D" parent="." unique_id=2085173843]
+
+[node name="Enemigos" type="Node2D" parent="." unique_id=653420134]
+
+[node name="Jugador" type="Node2D" parent="." unique_id=1254093705]
+script = ExtResource("3")
+
+[node name="Camara" type="Camera2D" parent="Jugador" unique_id=411469967]
+position_smoothing_enabled = true
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=568238641]
+
+[node name="Estado" type="Label" parent="HUD" unique_id=1639379595]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 900.0
+offset_bottom = 48.0
+
+[node name="Minimapa" type="Control" parent="HUD" unique_id=1658546337]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("4")
+
+[node name="PuenteWeb" type="Node" parent="." unique_id=7463759]
+script = ExtResource("5")

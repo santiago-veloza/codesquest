@@ -2,7 +2,7 @@ import { QueryClient } from '@tanstack/react-query'
 import { beforeEach, describe, expect, it } from 'vitest'
 
 import type { Perfil } from '../api/tipos'
-import { CLAVES_CONSULTA } from '../app/rutas'
+import { CLAVES_CONSULTA } from '../api/clavesConsulta'
 import { PERFIL_PRUEBA, RECOMPENSA_MUNDO, RECOMPENSA_PRIMER_ACIERTO, prepararSesion } from '../pruebas/utilidades'
 import { textos } from '../textos/es'
 import { useNotificaciones } from './notificaciones'

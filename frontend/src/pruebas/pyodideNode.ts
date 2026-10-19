@@ -13,7 +13,7 @@ import type { EjecutarFn } from '../motor/tipos'
 export const TIEMPO_CARGA_PYODIDE_MS = 60_000
 
 // En Node se leen los .py desde disco (Vitest no siempre aplica ?raw fuera del navegador).
-const FUENTES = ['../compartido/python/reglas_estructura.py', 'src/motor/python/arnes.py']
+const FUENTES = ['../backend/compartido/python/reglas_estructura.py', 'src/motor/python/arnes.py']
 
 export async function crearEjecutorNode(): Promise<EjecutarFn> {
   const pyodide = await loadPyodide()

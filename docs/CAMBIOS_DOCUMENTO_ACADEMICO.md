@@ -1,3 +1,4 @@
+cls
 # Cambios que afectan al documento académico
 
 Lista acumulada durante el Sprint 1. Al cerrar el sprint se entrega completa y depurada.
@@ -35,6 +36,11 @@ Además, `mundo` agrega `mapa` (JSON: filas del laberinto).
   quedan exentas. Agregar al caso de uso "Registrarse" la validación del dominio.
 - **RF-13 (recorrer laberinto)** se amplía: enemigos que patrullan, disparo con Espacio y empujón al
   ser alcanzado. La salida exige los 3 desafíos resueltos.
+- **Mundo 5 (El Núcleo: Bug Master) implementado como el final:** laberinto 35×19 con 10 enemigos
+  (el doble que el Mundo 4) y los más rápidos (moscas), y 3 desafíos de dificultad `jefe` (50 XP) de
+  DEPURACIÓN: el código base ya trae un bug que hay que encontrar y corregir (5.1 tipos/TypeError,
+  5.2 condición en el borde `<` vs `<=`, 5.3 acumulador en un ciclo dentro de una función). Al
+  completarlo se otorga el logro "Cazador de Bugs" y se muestra el mensaje de victoria final.
 - **Nuevo RF-14 (vida y game over):** el jugador tiene 100 % de vida (5 corazones); cada golpe de
   enemigo quita 10 % (1 s de invulnerabilidad y el enemigo rebota). Sin vida: "Game over" y la opción
   Reiniciar, que devuelve al punto de partida y vuelve a cerrar los candados del laberinto
@@ -71,7 +77,7 @@ Además, `mundo` agrega `mapa` (JSON: filas del laberinto).
 ## Diagrama de clases
 
 - Clases nuevas de dominio: `Rol`, `Avatar`, `Dificultad`, `ResultadoIntento`, `EstadoMundo`, `CriterioLogro` (enumeraciones).
-- Servicio `cargar_contenido` (lee y valida los JSON de `content/`; valida con `ast` que la preparación de
+- Servicio `cargar_contenido` (lee y valida los JSON de `backend/content/`; valida con `ast` que la preparación de
   cada variante solo tenga asignaciones literales).
 - Motor de ejecución (frontend): `EjecutorPython` (Web Worker + límite de tiempo), arnés Python
   (`ejecutar_solicitud`), `evaluarDesafio`, `traducirError`.
@@ -84,11 +90,18 @@ Además, `mundo` agrega `mapa` (JSON: filas del laberinto).
 
 ## Arquitectura / componentes / despliegue
 
-- Las reglas AST viven en `compartido/python/` y las usan navegador y servidor (diagrama de componentes).
+- **Arquitectura formalizada (ADR-0006):** cliente-servidor híbrido con backend monolito modular en
+  capas (presentación → lógica → datos por app) y frontend en 6 niveles. Base para el diagrama de
+  componentes; las reglas se verifican con pruebas automáticas.
+
+- Las reglas AST viven en `backend/compartido/python/` y las usan navegador y servidor (diagrama de componentes).
 - Diagrama de secuencia nuevo: chocar con obstáculo → modal del desafío → POST intento → obstáculo resuelto en Godot.
 
 - Arquitectura híbrida (ADR-0002): React (plataforma) + Godot 4.7 exportado a web (escenas del juego) + Django REST.
-- Comunicación React ↔ Godot por `ColaDeAcciones` en JSON mediante `JavaScriptBridge`.
+- Comunicación React ↔ Godot por mensajes JSON mediante `JavaScriptBridge` (`PuenteWeb`):
+  React envía `cargarLaberinto`, `resolverObstaculo`, `pausar`, `reanudar` y `configurar`; Godot
+  avisa con eventos (`obstaculo`, `golpe`, `game_over`, `salida`…). La `ColaDeAcciones` del
+  prototipo inicial se eliminó junto con esa escena.
 - Django 5.2 LTS en lugar de la versión más reciente (ADR-0001).
 - Ejecución del código del estudiante en el navegador con Pyodide 314 (Python 3.14) en un Web Worker,
   servido localmente; el servidor nunca ejecuta código (ADR-0004). Debe aparecer en el diagrama de

@@ -1,0 +1,215 @@
+{
+  "$schema": "../esquemas/mundo.schema.json",
+  "codigo": "mundo_5",
+  "orden": 5,
+  "nombre": "El Núcleo: Bug Master",
+  "conceptos": "Integración y depuración: encontrar y corregir errores",
+  "descripcion": "Bug Master, la encarnación de los errores de programación, tomó el núcleo del sistema. Solo corrigiendo sus bugs se debilita.",
+  "desafios": [
+    {
+      "codigo": "5.1",
+      "orden": 1,
+      "titulo": "El bug del tipo",
+      "dificultad": "jefe",
+      "enunciado": "Bug Master corrompió el marcador: los puntos llegan como TEXTO (puntos_texto) y al sumarles el bonus el programa se rompe. Ejecuta el código, lee el error y corrígelo para que total guarde la suma como número.",
+      "codigo_base": "total = puntos_texto + bonus",
+      "pistas": [
+        "Ejecuta el código tal como está y lee el mensaje de error: dice qué tipos no se pueden sumar.",
+        "puntos_texto es un str y bonus es un int. Python no suma texto con números.",
+        "Convierte el texto a número con int() antes de sumar."
+      ],
+      "pruebas": [
+        {
+          "tipo": "variables",
+          "variables": {
+            "total": {
+              "valor": "{{total}}",
+              "tipo": "int"
+            }
+          }
+        }
+      ],
+      "xp_base": 50,
+      "solucion_referencia": "total = int(puntos_texto) + bonus",
+      "errores_tipicos": [
+        {
+          "descripcion": "El bug sin corregir",
+          "codigo": "total = puntos_texto + bonus"
+        },
+        {
+          "descripcion": "Convierte al revés (une textos)",
+          "codigo": "total = puntos_texto + str(bonus)"
+        },
+        {
+          "descripcion": "Resultado escrito a mano",
+          "codigo": "total = 50"
+        }
+      ],
+      "variantes": [
+        {
+          "preparacion": "puntos_texto = \"40\"\nbonus = 10",
+          "esperado": {
+            "total": 50
+          }
+        },
+        {
+          "preparacion": "puntos_texto = \"15\"\nbonus = 5",
+          "esperado": {
+            "total": 20
+          }
+        }
+      ]
+    },
+    {
+      "codigo": "5.2",
+      "orden": 2,
+      "titulo": "El escudo que no cae",
+      "dificultad": "jefe",
+      "enunciado": "El escudo de Bug Master debe caer cuando su energía llega a 0 o menos. Pero el código tiene un bug: con energía exactamente en 0 el escudo sigue activo. Encuentra el error en la condición.",
+      "codigo_base": "if energia_bug < 0:\n    escudo = \"caido\"\nelse:\n    escudo = \"activo\"",
+      "pistas": [
+        "Prueba mentalmente el caso energia_bug = 0: ¿0 < 0 es verdadero o falso?",
+        "El enunciado dice \"0 o menos\": el 0 también debe hacer caer el escudo.",
+        "Cambia el operador < por el que incluye el igual: <=."
+      ],
+      "pruebas": [
+        {
+          "tipo": "variables",
+          "variables": {
+            "escudo": {
+              "valor": "{{escudo}}",
+              "tipo": "str"
+            }
+          }
+        }
+      ],
+      "xp_base": 50,
+      "solucion_referencia": "if energia_bug <= 0:\n    escudo = \"caido\"\nelse:\n    escudo = \"activo\"",
+      "errores_tipicos": [
+        {
+          "descripcion": "El bug sin corregir",
+          "codigo": "if energia_bug < 0:\n    escudo = \"caido\"\nelse:\n    escudo = \"activo\""
+        },
+        {
+          "descripcion": "Solo el 0 exacto",
+          "codigo": "if energia_bug == 0:\n    escudo = \"caido\"\nelse:\n    escudo = \"activo\""
+        },
+        {
+          "descripcion": "Escudo siempre caído",
+          "codigo": "escudo = \"caido\""
+        }
+      ],
+      "variantes": [
+        {
+          "preparacion": "energia_bug = 0",
+          "esperado": {
+            "escudo": "caido"
+          }
+        },
+        {
+          "preparacion": "energia_bug = 5",
+          "esperado": {
+            "escudo": "activo"
+          }
+        },
+        {
+          "preparacion": "energia_bug = -3",
+          "esperado": {
+            "escudo": "caido"
+          }
+        }
+      ]
+    },
+    {
+      "codigo": "5.3",
+      "orden": 3,
+      "titulo": "El contador roto",
+      "dificultad": "jefe",
+      "enunciado": "Para derrotar a Bug Master hay que sumar el daño de todos tus golpes (la lista ataques). La función sumar_danos tiene un bug: solo recuerda el último golpe. Corrígela para que devuelva la suma de todos.",
+      "codigo_base": "def sumar_danos(golpes):\n    total = 0\n    for golpe in golpes:\n        total = golpe\n    return total\n\ndano_total = sumar_danos(ataques)",
+      "pistas": [
+        "Sigue el ciclo paso a paso con ataques = [3, 4, 5]: ¿qué vale total después de cada vuelta?",
+        "total = golpe REEMPLAZA el valor anterior en vez de acumularlo.",
+        "Suma cada golpe a lo que ya había: total = total + golpe (o total += golpe)."
+      ],
+      "pruebas": [
+        {
+          "tipo": "variables",
+          "variables": {
+            "dano_total": {
+              "valor": "{{dano_total}}",
+              "tipo": "int"
+            }
+          }
+        },
+        {
+          "tipo": "estructura",
+          "reglas": [
+            {
+              "regla": "usa_nodo",
+              "nodo": "For",
+              "mensaje": "Recorre la lista de golpes con un ciclo for."
+            },
+            {
+              "regla": "usa_nodo",
+              "nodo": "Return",
+              "mensaje": "La función debe devolver el total con return."
+            }
+          ]
+        }
+      ],
+      "xp_base": 50,
+      "solucion_referencia": "def sumar_danos(golpes):\n    total = 0\n    for golpe in golpes:\n        total = total + golpe\n    return total\n\ndano_total = sumar_danos(ataques)",
+      "errores_tipicos": [
+        {
+          "descripcion": "El bug sin corregir",
+          "codigo": "def sumar_danos(golpes):\n    total = 0\n    for golpe in golpes:\n        total = golpe\n    return total\n\ndano_total = sumar_danos(ataques)"
+        },
+        {
+          "descripcion": "Cuenta los golpes en vez de sumarlos",
+          "codigo": "def sumar_danos(golpes):\n    total = 0\n    for golpe in golpes:\n        total = total + 1\n    return total\n\ndano_total = sumar_danos(ataques)"
+        },
+        {
+          "descripcion": "return dentro del ciclo",
+          "codigo": "def sumar_danos(golpes):\n    total = 0\n    for golpe in golpes:\n        total = total + golpe\n        return total\n\ndano_total = sumar_danos(ataques)"
+        }
+      ],
+      "variantes": [
+        {
+          "preparacion": "ataques = [3, 4, 5]",
+          "esperado": {
+            "dano_total": 12
+          }
+        },
+        {
+          "preparacion": "ataques = [10, 1]",
+          "esperado": {
+            "dano_total": 11
+          }
+        }
+      ]
+    }
+  ],
+  "funciones_juego": [],
+  "mapa": [
+    "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
+    "waccwcwcecccccwcccccccccccwccccccew",
+    "wwwcwcwcwcwcwcwcwwwcwwwwwcwwwwwcwcw",
+    "weccwcccwcccccccecccwcccwcccwcccwcw",
+    "wcwwwcwcwwccwwwcwwwcwcwwwwwcwcwwwcw",
+    "wcwcccccwcccccccwcccwcwcccwcw3ccwcw",
+    "wcwcwwwwwcwwwcwcwcwwwcwcwcwcwcccwcw",
+    "wcwcwcccwcccccccwcccccccwcccccwcccw",
+    "wcccwcwcwcwcwwwwwcwcwwcewcwwwwwcwcw",
+    "wcwcccwcccccwcccwcccwcccccccccccccw",
+    "wcwwwwwcwwwcwcwcwwwcwcwcwcwcwwwwwww",
+    "wcccccwcccccwcwcccwcwcwcwcccwcccccw",
+    "wcwwwcwcwwcwwcwwwcwcwcwcccwwwwwcwcw",
+    "wcccwcceccccccccwcwcccwcwcccccwccew",
+    "wwwcwwcwwcwwwcwcw2wwwcccwwwwwcwcwcw",
+    "wcw1wcccccccwcwcwcccccwcwcccwcccccw",
+    "wcwcwcwcwwwcwwwewwwcwwwcwcwcwcwcwcw",
+    "weccccwcccccccccwcccccccwceccccccsw",
+    "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww"
+  ]
+}

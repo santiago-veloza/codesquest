@@ -66,9 +66,11 @@ def test_los_laberintos_reales_son_validos_y_crecen_en_tamano():
     mundos, _ = leer_y_validar(settings.CONTENIDO_DIR)
     con_mapa = [m for m in mundos if m.get("mapa")]
 
-    assert [m["orden"] for m in con_mapa] == [1, 2, 3, 4]
+    assert [m["orden"] for m in con_mapa] == [1, 2, 3, 4, 5]
     areas = [len(m["mapa"]) * len(m["mapa"][0]) for m in con_mapa]
     assert areas == sorted(areas)  # dificultad creciente
+    enemigos = ["".join(m["mapa"]).count("e") for m in con_mapa]
+    assert enemigos == sorted(enemigos) and enemigos[-1] > enemigos[-2]  # el final tiene más enemigos
     assert all(len(m["desafios"]) >= 2 for m in con_mapa)
 
 

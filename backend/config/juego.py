@@ -27,8 +27,9 @@ FRACCION_MINIMA_XP = 0.5
 
 # Umbral para alcanzar el nivel n: FACTOR_NIVEL * n * (n - 1) XP.
 # La especificación propone 50 y pide calibrar para que todo el juego lleve al nivel 5-6. Con el
-# contenido actual (12 desafíos, ~300 XP máximo) el factor 12 deja: nivel 2 = 24, 3 = 72, 4 = 144,
-# 5 = 240, 6 = 360. Recalibrar al agregar desafíos (y revisar test_gamificacion).
+# contenido actual (15 desafíos, 465 XP máximo con el Núcleo) el factor 12 deja: nivel 2 = 24,
+# 3 = 72, 4 = 144, 5 = 240, 6 = 360, 7 = 504: terminar todo lleva al nivel 6. Recalibrar al agregar
+# desafíos (y revisar test_gamificacion).
 FACTOR_NIVEL = 12
 
 # Puntos = toda la XP ganada + este bonus por cada mundo completado.

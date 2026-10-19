@@ -5,7 +5,7 @@
 import type { PyodideAPI } from 'pyodide'
 
 // Fuente única de las reglas AST: también la usa el servidor para revalidar sin ejecutar código.
-import fuenteReglas from '../../../compartido/python/reglas_estructura.py?raw'
+import fuenteReglas from '../../../backend/compartido/python/reglas_estructura.py?raw'
 import fuenteArnes from './python/arnes.py?raw'
 import type { ResultadoEjecucion, SolicitudEjecucion } from './tipos'
 

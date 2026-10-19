@@ -13,11 +13,3 @@ export const RUTAS = {
 export const rutaMundo = (id: number) => `/mundos/${id}`
 export const rutaDesafio = (id: number) => `/desafios/${id}`
 
-export const CLAVES_CONSULTA = {
-  perfil: ['perfil'],
-  logros: ['logros'],
-  mundos: ['mundos'],
-  mundo: (idMundo: number) => ['mundos', idMundo] as const,
-  desafiosDeMundo: (idMundo: number) => ['mundos', idMundo, 'desafios'] as const,
-  desafio: (idDesafio: number) => ['desafios', idDesafio] as const,
-} as const

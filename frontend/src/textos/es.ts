@@ -154,7 +154,7 @@ export const textos = {
     completadoTitulo: '¡Laberinto completado!',
     completadoSiguiente: (mundo: string) => `Se desbloqueó: ${mundo}.`,
     irAlSiguiente: (mundo: string) => `Ir a ${mundo} ▶`,
-    completadoTodos: '¡Completaste todos los mundos disponibles!',
+    completadoTodos: '¡Derrotaste a Bug Master! Corregiste sus bugs, restauraste el Núcleo y completaste CODEQUEST.',
     enConstruccion: 'El laberinto de este mundo todavía está en construcción.',
     jugarConTeclado: 'Haz clic en el laberinto (o pulsa este botón) para jugar con el teclado.',
     enfocar: 'Jugar en el laberinto',

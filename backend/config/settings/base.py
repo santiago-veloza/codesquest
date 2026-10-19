@@ -100,9 +100,9 @@ STATIC_ROOT = BACKEND_DIR / "staticfiles"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Mundos, desafíos y logros como datos versionados (ver content/README.md).
-CONTENIDO_DIR = RAIZ_PROYECTO / "content"
+CONTENIDO_DIR = BACKEND_DIR / "content"
 # Código Python compartido con el navegador (reglas AST de los desafíos).
-COMPARTIDO_PY_DIR = RAIZ_PROYECTO / "compartido" / "python"
+COMPARTIDO_PY_DIR = BACKEND_DIR / "compartido" / "python"
 
 # --- Seguridad común ---
 X_FRAME_OPTIONS = "DENY"

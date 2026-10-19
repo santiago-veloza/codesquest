@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { obtenerLogros, urlIcono } from '../api/gamificacion'
 import type { LogroDelUsuario } from '../api/tipos'
-import { CLAVES_CONSULTA } from '../app/rutas'
+import { CLAVES_CONSULTA } from '../api/clavesConsulta'
 import { Cargando, ErrorVista } from '../componentes/ui/EstadoVista'
 import { textos } from '../textos/es'
 import estilos from './Logros.module.css'
