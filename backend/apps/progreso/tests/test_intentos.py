@@ -94,7 +94,10 @@ def test_el_cliente_no_puede_asignarse_xp(api_estudiante, usuario):
     _intento(api_estudiante, desafio, xp_otorgada=999)
 
     # El campo enviado se ignora: la XP la calcula el servidor (xp_base + bonus de primer intento).
-    assert IntentoDesafio.objects.get(usuario=usuario).xp_otorgada == desafio.xp_base + juego.BONUS_PRIMER_INTENTO
+    assert (
+        IntentoDesafio.objects.get(usuario=usuario).xp_otorgada
+        == desafio.xp_base + juego.BONUS_PRIMER_INTENTO
+    )
 
 
 @pytest.mark.parametrize(
@@ -161,7 +164,12 @@ def test_reiniciar_tras_game_over_vuelve_a_poner_los_obstaculos(api_estudiante, 
     respuesta = api_estudiante.post(reverse("reiniciar-mundo", args=[_mundo(1).pk]))
 
     assert respuesta.status_code == 200
-    assert respuesta.json() == {"estado": "desbloqueado", "porcentaje": 0, "desafios_completados": 0, "total_desafios": 3}
+    assert respuesta.json() == {
+        "estado": "desbloqueado",
+        "porcentaje": 0,
+        "desafios_completados": 0,
+        "total_desafios": 3,
+    }
     obstaculos = api_estudiante.get(reverse("mundo", args=[_mundo(1).pk])).json()["obstaculos"]
     assert not any(o["resuelto"] for o in obstaculos)
     # El historial se conserva para el docente.

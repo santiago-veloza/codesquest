@@ -1,0 +1,141 @@
+{% extends "admin/base_site.html" %}
+{# Estadísticas del curso para el docente (RF-11). Los datos los calcula apps/progreso/estadisticas.py. #}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+  .cq-tarjetas { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 0 0 24px; padding: 0; list-style: none; }
+  @media (min-width: 900px) { .cq-tarjetas { grid-template-columns: repeat(3, 1fr); } }
+  .cq-tarjetas li { list-style: none; padding: 12px 16px; border: 1px solid var(--hairline-color); border-radius: 6px; background: var(--darkened-bg); }
+  .cq-tarjetas strong { display: block; font-size: 1.8em; line-height: 1.2; color: var(--body-fg); }
+  .cq-tarjetas span { color: var(--body-quiet-color); }
+  .cq-numero { text-align: right; font-variant-numeric: tabular-nums; }
+  .cq-barra { display: inline-block; vertical-align: middle; width: 80px; height: 8px; margin-left: 6px; border-radius: 4px; background: var(--hairline-color); overflow: hidden; }
+  .cq-barra > span { display: block; height: 100%; background: var(--primary); }
+  .cq-alerta { color: var(--error-fg); font-weight: bold; }
+  .module table { width: 100%; }
+  .cq-nota { color: var(--body-quiet-color); margin: 4px 0 16px; }
+</style>
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'admin:index' %}">Inicio</a> › {{ title }}
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+  <ul class="cq-tarjetas" aria-label="Resumen del curso">
+    <li><strong>{{ resumen.estudiantes }}</strong><span>estudiantes registrados</span></li>
+    <li><strong>{{ resumen.activos_recientes }}</strong><span>activos en los últimos {{ resumen.dias_actividad }} días</span></li>
+    <li><strong>{{ resumen.intentos }}</strong><span>intentos · {{ resumen.tasa_acierto }} % correctos</span></li>
+    <li><strong>{{ resumen.desafios_resueltos }}</strong><span>desafíos resueltos (en total)</span></li>
+    <li><strong>{{ resumen.mundos_completados }}</strong><span>mundos completados (en total)</span></li>
+    <li><strong>{{ resumen.nivel_promedio }}</strong><span>nivel promedio · {{ resumen.xp_promedio }} XP</span></li>
+  </ul>
+
+  <div class="module">
+    <table>
+      <caption>Avance por mundo</caption>
+      <thead>
+        <tr>
+          <th scope="col">Mundo</th>
+          <th scope="col" class="cq-numero">Llegaron</th>
+          <th scope="col" class="cq-numero">Completaron</th>
+          <th scope="col" class="cq-numero">Avance promedio</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for m in mundos %}
+        <tr>
+          <th scope="row">{{ m.orden }}. {{ m.nombre }}</th>
+          <td class="cq-numero">{{ m.llegaron }}</td>
+          <td class="cq-numero">
+            {{ m.completaron }} ({{ m.porcentaje_completaron }} %)
+            <span class="cq-barra" aria-hidden="true"><span style="width: {{ m.porcentaje_completaron }}%"></span></span>
+          </td>
+          <td class="cq-numero">{{ m.avance_promedio }} %</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="module">
+    <table>
+      <caption>Desafíos: ¿qué les cuesta más?</caption>
+      <thead>
+        <tr>
+          <th scope="col">Desafío</th>
+          <th scope="col" class="cq-numero">Lo intentaron</th>
+          <th scope="col" class="cq-numero">Lo resolvieron</th>
+          <th scope="col" class="cq-numero">Intentos correctos</th>
+          <th scope="col" class="cq-numero">Intentos por estudiante</th>
+          <th scope="col" class="cq-numero">Pistas promedio</th>
+          <th scope="col" class="cq-numero">Tiempo promedio</th>
+          <th scope="col">Error más común</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for d in desafios %}
+        <tr>
+          <th scope="row">{{ d.codigo }} · {{ d.titulo }}</th>
+          <td class="cq-numero">{{ d.estudiantes }}</td>
+          <td class="cq-numero">{{ d.resolvieron }}</td>
+          <td class="cq-numero{% if d.dificil %} cq-alerta{% endif %}">
+            {% if d.intentos %}{{ d.tasa_exito }} %{% else %}—{% endif %}
+          </td>
+          <td class="cq-numero">{% if d.intentos %}{{ d.intentos_por_estudiante }}{% else %}—{% endif %}</td>
+          <td class="cq-numero">{% if d.intentos %}{{ d.pistas_promedio }}{% else %}—{% endif %}</td>
+          <td class="cq-numero">{% if d.intentos %}{{ d.tiempo_promedio_s }} s{% else %}—{% endif %}</td>
+          <td>{{ d.error_frecuente|default:"—" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <p class="cq-nota">En rojo: desafíos con menos del {{ umbral_dificil }} % de intentos correctos (conviene reforzar ese tema en clase).</p>
+
+  <div class="module">
+    <table>
+      <caption>Estudiantes</caption>
+      <thead>
+        <tr>
+          <th scope="col">Estudiante</th>
+          <th scope="col" class="cq-numero">Nivel</th>
+          <th scope="col" class="cq-numero">XP</th>
+          <th scope="col" class="cq-numero">Puntos</th>
+          <th scope="col" class="cq-numero">Mundos completados</th>
+          <th scope="col" class="cq-numero">Desafíos resueltos</th>
+          <th scope="col" class="cq-numero">Intentos</th>
+          <th scope="col">Última actividad</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for e in estudiantes %}
+        <tr>
+          <th scope="row">
+            <a href="{% url 'admin:usuarios_usuario_change' e.id %}">{{ e.apodo|default:e.email }}</a><br>
+            <small>{{ e.email }}</small>
+          </th>
+          <td class="cq-numero">{{ e.nivel }}</td>
+          <td class="cq-numero">{{ e.experiencia }}</td>
+          <td class="cq-numero">{{ e.puntos }}</td>
+          <td class="cq-numero">{{ e.mundos_completados }}</td>
+          <td class="cq-numero">{{ e.desafios_resueltos }}</td>
+          <td class="cq-numero">{{ e.intentos }}</td>
+          <td>{{ e.ultima_actividad|date:"Y-m-d H:i"|default:"Sin actividad" }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="8">Aún no hay estudiantes registrados.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <p>
+    <a class="button" href="{% url 'admin-estadisticas-csv' %}">Descargar estudiantes en CSV (Excel)</a>
+    <span class="cq-nota">Contiene datos personales (Ley 1581 de 2012): úsalo solo para el seguimiento del curso.</span>
+  </p>
+</div>
+{% endblock %}

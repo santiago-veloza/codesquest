@@ -34,3 +34,7 @@ FACTOR_NIVEL = 12
 
 # Puntos = toda la XP ganada + este bonus por cada mundo completado.
 BONUS_PUNTOS_MUNDO = 25
+
+# --- Estadísticas del docente (RF-11) ---
+DIAS_ACTIVIDAD_RECIENTE = 7  # un estudiante cuenta como "activo" si hizo intentos en estos días
+UMBRAL_DESAFIO_DIFICIL = 50  # % de intentos correctos por debajo del cual se marca para reforzar

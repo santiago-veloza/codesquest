@@ -104,8 +104,9 @@ def al_completar_mundo(usuario, mundo: Mundo, ya_estaba_completado: bool) -> Rec
     if ya_estaba_completado:
         return _aplicar(usuario, 0, 0, [])
     candidatos = list(Logro.objects.filter(criterio=CriterioLogro.COMPLETAR_MUNDO, mundo=mundo))
-    sin_pistas = not IntentoDesafio.objects.filter(usuario=usuario, desafio__mundo=mundo, pistas_usadas__gt=0).exists()
+    sin_pistas = not IntentoDesafio.objects.filter(
+        usuario=usuario, desafio__mundo=mundo, pistas_usadas__gt=0
+    ).exists()
     if sin_pistas:
         candidatos += list(Logro.objects.filter(criterio=CriterioLogro.MUNDO_SIN_PISTAS))
     return _aplicar(usuario, 0, juego.BONUS_PUNTOS_MUNDO, _otorgar(usuario, candidatos))
-

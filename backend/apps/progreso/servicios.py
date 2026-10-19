@@ -60,9 +60,13 @@ def estado_de_mundo(usuario, mundo: Mundo) -> EstadoDeMundo:
 
 def desafios_resueltos(usuario, mundo: Mundo) -> set[int]:
     """IDs de los desafíos del mundo con al menos un intento correcto (desde el último reinicio)."""
-    intentos = IntentoDesafio.objects.filter(usuario=usuario, desafio__mundo=mundo, resultado=ResultadoIntento.CORRECTO)
+    intentos = IntentoDesafio.objects.filter(
+        usuario=usuario, desafio__mundo=mundo, resultado=ResultadoIntento.CORRECTO
+    )
     reinicio = (
-        ProgresoMundo.objects.filter(usuario=usuario, mundo=mundo).values_list("reiniciado_en", flat=True).first()
+        ProgresoMundo.objects.filter(usuario=usuario, mundo=mundo)
+        .values_list("reiniciado_en", flat=True)
+        .first()
     )
     if reinicio:
         intentos = intentos.filter(fecha__gt=reinicio)
@@ -99,7 +103,11 @@ def registrar_intento(usuario, desafio: Desafio, datos: dict) -> IntentoRegistra
         tiempo_ms=datos["tiempo_ms"],
     )
     correcto = resultado == ResultadoIntento.CORRECTO
-    xp = gamificacion.xp_para_intento_correcto(usuario, desafio, intento.pistas_usadas, intento.id) if correcto else 0
+    xp = (
+        gamificacion.xp_para_intento_correcto(usuario, desafio, intento.pistas_usadas, intento.id)
+        if correcto
+        else 0
+    )
     if xp:
         intento.xp_otorgada = xp
         intento.save(update_fields=["xp_otorgada"])

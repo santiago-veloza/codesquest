@@ -19,15 +19,30 @@ COMPARTIDO = APPS.parent / "compartido" / "python"
 
 PRESENTACION = {"views", "serializers", "urls", "admin", "acceso", "seguridad", "excepciones"}
 DATOS = {"models"}
-ESCRITURAS_ORM = {"save", "delete", "create", "bulk_create", "bulk_update", "get_or_create", "update_or_create"}
+ESCRITURAS_ORM = {
+    "save",
+    "delete",
+    "create",
+    "bulk_create",
+    "bulk_update",
+    "get_or_create",
+    "update_or_create",
+}
 # Módulos de DRF que solo tienen sentido en la capa de presentación (HTTP).
-DRF_PRESENTACION = ("rest_framework.views", "rest_framework.generics", "rest_framework.response", "rest_framework.request")
+DRF_PRESENTACION = (
+    "rest_framework.views",
+    "rest_framework.generics",
+    "rest_framework.response",
+    "rest_framework.request",
+)
 PELIGROSAS = {"exec", "eval", "compile", "__import__"}
 
 
 def _modulos() -> list[Path]:
     return sorted(
-        p for p in APPS.glob("*/*.py") if p.name != "__init__.py" and "migrations" not in p.parts and "tests" not in p.parts
+        p
+        for p in APPS.glob("*/*.py")
+        if p.name != "__init__.py" and "migrations" not in p.parts and "tests" not in p.parts
     )
 
 
@@ -76,7 +91,11 @@ def test_las_vistas_no_escriben_en_la_base_de_datos():
     errores = []
     for ruta in APPS.glob("*/views.py"):
         for nodo in ast.walk(ast.parse(ruta.read_text(encoding="utf-8"))):
-            if isinstance(nodo, ast.Call) and isinstance(nodo.func, ast.Attribute) and nodo.func.attr in ESCRITURAS_ORM:
+            if (
+                isinstance(nodo, ast.Call)
+                and isinstance(nodo.func, ast.Attribute)
+                and nodo.func.attr in ESCRITURAS_ORM
+            ):
                 errores.append(f"{ruta.parent.name}/views.py:{nodo.lineno} llama .{nodo.func.attr}()")
     assert errores == []
 
@@ -121,7 +140,9 @@ def test_los_servicios_no_forman_ciclos_entre_apps():
     for ruta in APPS.glob("*/servicios.py"):
         app = ruta.parent.name
         grafo[app] = {
-            m.split(".")[1] for _, m in _imports(ruta) if _capa_de(m) == "servicios" and m.split(".")[1] != app
+            m.split(".")[1]
+            for _, m in _imports(ruta)
+            if _capa_de(m) == "servicios" and m.split(".")[1] != app
         } | {m.split(".")[1] for _, m in _imports(ruta) if m.startswith("apps.") and m.count(".") == 1}
 
     def visitar(app, camino):
@@ -146,8 +167,18 @@ def test_el_servidor_nunca_ejecuta_codigo_de_estudiantes(raiz):
             if isinstance(nodo, ast.Call) and isinstance(nodo.func, ast.Name) and nodo.func.id in PELIGROSAS:
                 errores.append(f"{ruta.name}:{nodo.lineno} llama {nodo.func.id}()")
             if isinstance(nodo, (ast.Import, ast.ImportFrom)):
-                nombres = [a.name for a in nodo.names] if isinstance(nodo, ast.Import) else [nodo.module or ""]
-                errores += [f"{ruta.name}:{nodo.lineno} importa {n}" for n in nombres if n.split(".")[0] == "subprocess"]
-            if isinstance(nodo, ast.Attribute) and nodo.attr in {"system", "popen"} and getattr(nodo.value, "id", "") == "os":
+                nombres = (
+                    [a.name for a in nodo.names] if isinstance(nodo, ast.Import) else [nodo.module or ""]
+                )
+                errores += [
+                    f"{ruta.name}:{nodo.lineno} importa {n}"
+                    for n in nombres
+                    if n.split(".")[0] == "subprocess"
+                ]
+            if (
+                isinstance(nodo, ast.Attribute)
+                and nodo.attr in {"system", "popen"}
+                and getattr(nodo.value, "id", "") == "os"
+            ):
                 errores.append(f"{ruta.name}:{nodo.lineno} usa os.{nodo.attr}")
     assert errores == []

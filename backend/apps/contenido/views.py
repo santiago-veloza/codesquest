@@ -14,6 +14,7 @@ from .serializers import (
     MundoSerializer,
 )
 
+
 @extend_schema(summary="Mundos con su estado para el usuario")
 class VistaMundos(ListAPIView):
     serializer_class = MundoSerializer

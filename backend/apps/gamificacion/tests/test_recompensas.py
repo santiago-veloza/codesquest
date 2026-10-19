@@ -21,7 +21,12 @@ def api_estudiante(api, usuario, contenido_tmp):
 
 
 def _intento(api, desafio, resultado="correcto", **extra):
-    datos = {"codigo_enviado": desafio.solucion_referencia, "resultado": resultado, "tiempo_ms": 5000, **extra}
+    datos = {
+        "codigo_enviado": desafio.solucion_referencia,
+        "resultado": resultado,
+        "tiempo_ms": 5000,
+        **extra,
+    }
     return api.post(reverse("intentos", args=[desafio.pk]), datos, format="json").json()
 
 
@@ -49,7 +54,7 @@ def test_primer_acierto_da_xp_base_mas_bonus_y_el_primer_logro(api_estudiante, u
     xp = desafio.xp_base + juego.BONUS_PRIMER_INTENTO
     assert recompensa["xp_otorgada"] == xp
     assert recompensa["experiencia"] == xp and recompensa["puntos"] == xp
-    assert [l["codigo"] for l in recompensa["logros_nuevos"]] == ["primer_codigo"]
+    assert [logro["codigo"] for logro in recompensa["logros_nuevos"]] == ["primer_codigo"]
     assert recompensa["experiencia_nivel_actual"] <= xp < recompensa["experiencia_siguiente_nivel"]
     perfil = Perfil.objects.get(usuario=usuario)
     assert (perfil.experiencia, perfil.puntos) == (xp, xp)
@@ -67,9 +72,14 @@ def test_las_pistas_restan_xp(api_estudiante):
 
     recompensa = _intento(api_estudiante, desafio, pistas_usadas=2)["recompensa"]
 
-    assert recompensa["xp_otorgada"] == max(
-        desafio.xp_base - 2 * juego.PENALIZACION_POR_PISTA, int(desafio.xp_base * juego.FRACCION_MINIMA_XP)
-    ) + juego.BONUS_PRIMER_INTENTO
+    assert (
+        recompensa["xp_otorgada"]
+        == max(
+            desafio.xp_base - 2 * juego.PENALIZACION_POR_PISTA,
+            int(desafio.xp_base * juego.FRACCION_MINIMA_XP),
+        )
+        + juego.BONUS_PRIMER_INTENTO
+    )
 
 
 def test_resolver_otra_vez_no_da_mas_xp_ni_logros(api_estudiante, usuario):
@@ -84,7 +94,9 @@ def test_resolver_otra_vez_no_da_mas_xp_ni_logros(api_estudiante, usuario):
 
 
 def test_un_intento_incorrecto_no_da_nada(api_estudiante, usuario):
-    recompensa = _intento(api_estudiante, Desafio.objects.get(codigo="1.1"), resultado="incorrecto")["recompensa"]
+    recompensa = _intento(api_estudiante, Desafio.objects.get(codigo="1.1"), resultado="incorrecto")[
+        "recompensa"
+    ]
 
     assert (recompensa["xp_otorgada"], recompensa["experiencia"], recompensa["logros_nuevos"]) == (0, 0, [])
     assert _logros(usuario) == set()
@@ -95,7 +107,9 @@ def test_el_nivel_sube_al_cruzar_el_umbral(api_estudiante, usuario):
 
     experiencia = respuestas[-1]["recompensa"]["experiencia"]
     assert respuestas[-1]["recompensa"]["nivel"] == nivel_para(experiencia)
-    assert any(r["recompensa"]["subio_de_nivel"] for r in respuestas) == (nivel_para(experiencia) > juego.NIVEL_INICIAL)
+    assert any(r["recompensa"]["subio_de_nivel"] for r in respuestas) == (
+        nivel_para(experiencia) > juego.NIVEL_INICIAL
+    )
 
 
 def test_completar_sin_pistas_da_logro_del_mundo_sin_pistas_y_bonus(api_estudiante, usuario):
@@ -103,7 +117,7 @@ def test_completar_sin_pistas_da_logro_del_mundo_sin_pistas_y_bonus(api_estudian
 
     recompensa = _completar(api_estudiante, 1)["recompensa"]
 
-    assert {l["codigo"] for l in recompensa["logros_nuevos"]} == {"maestro_variables", "sin_pistas"}
+    assert {logro["codigo"] for logro in recompensa["logros_nuevos"]} == {"maestro_variables", "sin_pistas"}
     assert recompensa["puntos"] == puntos_antes + juego.BONUS_PUNTOS_MUNDO
     assert (recompensa["xp_otorgada"], recompensa["puntos_otorgados"]) == (0, juego.BONUS_PUNTOS_MUNDO)
 
@@ -113,7 +127,7 @@ def test_completar_usando_pistas_no_da_el_logro_sin_pistas(api_estudiante, usuar
 
     recompensa = _completar(api_estudiante, 1)["recompensa"]
 
-    assert [l["codigo"] for l in recompensa["logros_nuevos"]] == ["maestro_variables"]
+    assert [logro["codigo"] for logro in recompensa["logros_nuevos"]] == ["maestro_variables"]
 
 
 def test_completar_dos_veces_no_suma_el_bonus_otra_vez(api_estudiante, usuario):
@@ -132,12 +146,12 @@ def test_el_catalogo_marca_los_logros_obtenidos(api_estudiante):
 
     catalogo = api_estudiante.get(reverse("logros")).json()
 
-    assert [l["codigo"] for l in catalogo][0] == "primer_codigo"
-    obtenidos = {l["codigo"]: l for l in catalogo if l["obtenido"]}
+    assert [logro["codigo"] for logro in catalogo][0] == "primer_codigo"
+    obtenidos = {logro["codigo"]: logro for logro in catalogo if logro["obtenido"]}
     assert set(obtenidos) == {"primer_codigo"}
     assert obtenidos["primer_codigo"]["fecha_obtencion"]
-    assert all(l["fecha_obtencion"] is None for l in catalogo if not l["obtenido"])
-    assert all(l["icono"].startswith("img/logros/") for l in catalogo)
+    assert all(logro["fecha_obtencion"] is None for logro in catalogo if not logro["obtenido"])
+    assert all(logro["icono"].startswith("img/logros/") for logro in catalogo)
 
 
 def test_el_catalogo_exige_sesion(api):

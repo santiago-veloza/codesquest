@@ -76,6 +76,7 @@ python manage.py runserver 127.0.0.1:8000
 | http://127.0.0.1:8000/api/v1/salud/ | Estado de la API y de la base de datos |
 | http://127.0.0.1:8000/api/v1/docs/ | Documentación interactiva (Swagger / OpenAPI) |
 | http://127.0.0.1:8000/admin/ | Administración de Django |
+| http://127.0.0.1:8000/admin/estadisticas/ | **Estadísticas del curso** para el docente (avance por mundo, dificultad de cada desafío, estudiantes y exportación CSV) |
 
 Endpoints de autenticación (detalle en `/api/v1/docs/` y `docs/openapi.yaml`):
 

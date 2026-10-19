@@ -36,6 +36,14 @@ Además, `mundo` agrega `mapa` (JSON: filas del laberinto).
   quedan exentas. Agregar al caso de uso "Registrarse" la validación del dominio.
 - **RF-13 (recorrer laberinto)** se amplía: enemigos que patrullan, disparo con Espacio y empujón al
   ser alcanzado. La salida exige los 3 desafíos resueltos.
+- **RF-11 (estadísticas del docente) implementado en el admin** (`/admin/estadisticas/`, solo cuentas
+  con acceso al admin): resumen del curso (estudiantes, activos en 7 días, intentos y % correctos,
+  desafíos resueltos, mundos completados, nivel y XP promedio), avance por mundo, tabla por desafío
+  (intentos, quiénes lo resolvieron, % correctos, intentos por estudiante, pistas y tiempo promedio,
+  error más común; en rojo los de menos del 50 % para reforzar en clase) y tabla por estudiante con
+  exportación CSV para Excel. Solo cuentan las cuentas de estudiante. El CSV neutraliza fórmulas
+  (OWASP) y advierte que contiene datos personales (Ley 1581). Nuevo caso de uso: "Consultar
+  estadísticas del curso" (actor: docente).
 - **Mundo 5 (El Núcleo: Bug Master) implementado como el final:** laberinto 35×19 con 10 enemigos
   (el doble que el Mundo 4) y los más rápidos (moscas), y 3 desafíos de dificultad `jefe` (50 XP) de
   DEPURACIÓN: el código base ya trae un bug que hay que encontrar y corregir (5.1 tipos/TypeError,

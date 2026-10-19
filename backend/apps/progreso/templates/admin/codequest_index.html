@@ -1,0 +1,17 @@
+{% extends "admin/index.html" %}
+{# Portada del admin con el acceso a las estadísticas del curso (RF-11). #}
+
+{% block content %}
+<div class="module" id="estadisticas-del-curso">
+  <table>
+    <caption>Seguimiento del curso</caption>
+    <tbody>
+      <tr>
+        <th scope="row"><a href="{% url 'admin-estadisticas' %}">Estadísticas del curso</a></th>
+        <td>Avance por mundo, dificultad de cada desafío y progreso de cada estudiante.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+{{ block.super }}
+{% endblock %}

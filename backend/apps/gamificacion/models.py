@@ -16,7 +16,9 @@ class Logro(models.Model):
     codigo = models.SlugField(max_length=40, unique=True)
     nombre = models.CharField(max_length=60)
     descripcion = models.CharField(max_length=200)
-    icono = models.CharField(max_length=120, help_text="Ruta pública del icono en el frontend (img/logros/...).")
+    icono = models.CharField(
+        max_length=120, help_text="Ruta pública del icono en el frontend (img/logros/...)."
+    )
     criterio = models.CharField(max_length=20, choices=CriterioLogro.choices)
     # Solo para COMPLETAR_MUNDO: qué mundo hay que completar.
     mundo = models.ForeignKey(Mundo, on_delete=models.PROTECT, null=True, blank=True, related_name="logros")
